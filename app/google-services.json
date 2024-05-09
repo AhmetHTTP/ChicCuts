@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "617968751950",
+    "project_id": "chiccutss",
+    "storage_bucket": "chiccutss.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617968751950:android:d77810841fde631f21ba1f",
+        "android_client_info": {
+          "package_name": "com.chiccuts"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7Oq9N7_nMYP_VVFn38c3k-1_6JmEq1n8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
