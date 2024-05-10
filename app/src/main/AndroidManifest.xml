@@ -11,6 +11,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ChicCuts"
-        tools:targetApi="31" />
+        tools:targetApi="31">
 
+        <!-- MainActivity configured as the LAUNCHER activity and exported set to true -->
+        <activity android:name=".activities.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Other activities of your application. Set exported as needed. -->
+        <activity android:name=".activities.RegisterActivity"
+            android:exported="false" />
+        <activity android:name=".activities.LoginActivity"
+            android:exported="false" />
+        <!-- Add other activities with explicit exported attribute as necessary -->
+
+    </application>
 </manifest>
