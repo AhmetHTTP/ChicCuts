@@ -82,14 +82,24 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/btnRegisterUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/register"
+        android:text="@string/register_user"
         app:layout_constraintTop_toBottomOf="@+id/rgGender"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnRegisterBarber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/register_barber"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegisterUser"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
 
     <Button
         android:id="@+id/btnGoToLogin"
@@ -98,7 +108,7 @@
         android:text="@string/already_member"
         android:background="@android:color/transparent"
         android:textColor="@color/teal_200"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegisterBarber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />

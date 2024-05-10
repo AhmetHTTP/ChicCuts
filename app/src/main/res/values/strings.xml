@@ -11,4 +11,7 @@
     <string name="female">Female</string>
     <string name="other">Other</string>
     <string name="already_member">Already a member? Log in here</string>
+    <string name="register_user">Register as User</string>
+    <string name="register_barber">Register as Barber/HairDresser</string>
+    <string name="logout">Logout</string>
 </resources>

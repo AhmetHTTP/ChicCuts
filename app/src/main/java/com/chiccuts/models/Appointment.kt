@@ -15,13 +15,13 @@ import java.util.Date
  * @property creationDate The date and time when the appointment was created.
  */
 data class Appointment(
-    val appointmentId: String,
-    val userId: String,
+    val appointmentId: String = "",
+    val userId: String = "",
     val barberId: String? = null,
     val hairdresserId: String? = null,
-    val serviceType: String,
-    val appointmentTime: Date,
-    val location: String,
-    val status: String,
+    val serviceType: String = "",
+    val appointmentTime: Date = Date(),
+    val location: String = "",
+    val status: String = "Scheduled",  // Assuming "Scheduled" as the default status.
     val creationDate: Date = Date()
 )

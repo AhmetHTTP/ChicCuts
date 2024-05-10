@@ -1,10 +1,12 @@
 package com.chiccuts.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chiccuts.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.chiccuts.activities.MainActivity  // MainActivity'yi import etmeyi unutmayın
 
 class LoginActivity : AppCompatActivity() {
 
@@ -30,22 +32,35 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        // Set up the button that navigates to the Register Activity
         binding.btnGoToRegister.setOnClickListener {
             // Navigate to Register Activity
-            // Intent code here if using traditional Intent, or Navigation Component actions
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 
     private fun loginUser(email: String, password: String) {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Email and password must not be empty", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                // Navigate to the next activity
+                navigateToMain()
             } else {
                 // If sign in fails, display a message to the user.
                 Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
+
+    private fun navigateToMain() {
+        val mainActivityIntent = Intent(this, MainActivity::class.java)
+        startActivity(mainActivityIntent)
+        finish()  // LoginActivity'yi bitir
+    }
+
 }
