@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/ivBarberPhoto"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_launcher_background"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvBarberName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ivBarberPhoto"
+            android:layout_marginLeft="16dp"
+            android:text="John Doe"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvBarberServices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBarberName"
+            android:layout_toRightOf="@id/ivBarberPhoto"
+            android:layout_marginLeft="16dp"
+            android:text="Hair Cut, Beard Trim"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBarberServices"
+            android:layout_toRightOf="@id/ivBarberPhoto"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
+            android:numStars="5"
+            android:rating="4.5"
+            android:stepSize="0.5"
+            tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

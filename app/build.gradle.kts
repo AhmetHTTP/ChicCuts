@@ -1,8 +1,7 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.android.application")
     id("com.google.gms.google-services")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -17,6 +16,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Data Binding etkinleştirme
+        // dataBinding {
+        //     isEnabled = true
+        // }
     }
 
     buildTypes {
@@ -32,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    // Data Binding için buildFeatures etkinleştirme
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -39,6 +46,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation("androidx.core:core-ktx:+")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -46,4 +54,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+
 }
