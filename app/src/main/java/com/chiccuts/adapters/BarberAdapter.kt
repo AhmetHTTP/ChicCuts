@@ -24,7 +24,7 @@ class BarberAdapter : ListAdapter<Barber, BarberAdapter.BarberViewHolder>(Barber
         fun bind(barber: Barber) {
             binding.tvBarberName.text = barber.name
             binding.tvBarberServices.text = barber.serviceTypes.joinToString(", ")
-            // Set more fields as needed, e.g., ratings, image with Glide or Picasso
+            // Additional details can be added here
         }
     }
 }

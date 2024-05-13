@@ -5,17 +5,11 @@ import com.chiccuts.models.Barber
 import com.chiccuts.models.Hairdresser
 import com.chiccuts.models.Appointment
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.Query
 
-/**
- * Utility class to handle Firestore operations efficiently.
- */
 object FirestoreUtil {
     private val firestoreInstance: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
-    /**
-     * Add a new user to the Firestore database.
-     */
     fun addUser(user: User, onComplete: (Boolean, String) -> Unit) {
         firestoreInstance.collection("users")
             .document(user.userId)
@@ -28,15 +22,12 @@ object FirestoreUtil {
             }
     }
 
-    /**
-     * Fetch a user from Firestore by their userId.
-     */
     fun getUser(userId: String, onComplete: (User?, String) -> Unit) {
         firestoreInstance.collection("users")
             .document(userId)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                val user = documentSnapshot.toObject<User>()
+                val user = documentSnapshot.toObject(User::class.java)
                 if (user != null) {
                     onComplete(user, "User fetched successfully")
                 } else {
@@ -48,9 +39,6 @@ object FirestoreUtil {
             }
     }
 
-    /**
-     * Add a new barber to the Firestore database.
-     */
     fun addBarber(barber: Barber, onComplete: (Boolean, String) -> Unit) {
         firestoreInstance.collection("barbers")
             .document(barber.barberId)
@@ -63,29 +51,6 @@ object FirestoreUtil {
             }
     }
 
-    /**
-     * Fetch a barber from Firestore by their barberId.
-     */
-    fun getBarber(barberId: String, onComplete: (Barber?, String) -> Unit) {
-        firestoreInstance.collection("barbers")
-            .document(barberId)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                val barber = documentSnapshot.toObject<Barber>()
-                if (barber != null) {
-                    onComplete(barber, "Barber fetched successfully")
-                } else {
-                    onComplete(null, "Barber not found")
-                }
-            }
-            .addOnFailureListener { exception ->
-                onComplete(null, exception.message ?: "Error fetching barber")
-            }
-    }
-
-    /**
-     * Add a new hairdresser to the Firestore database.
-     */
     fun addHairdresser(hairdresser: Hairdresser, onComplete: (Boolean, String) -> Unit) {
         firestoreInstance.collection("hairdressers")
             .document(hairdresser.hairdresserId)
@@ -98,9 +63,6 @@ object FirestoreUtil {
             }
     }
 
-    /**
-     * Schedule a new appointment.
-     */
     fun addAppointment(appointment: Appointment, onComplete: (Boolean, String) -> Unit) {
         firestoreInstance.collection("appointments")
             .document(appointment.appointmentId)
@@ -113,19 +75,71 @@ object FirestoreUtil {
             }
     }
 
-    /**
-     * Fetch appointments for a specific user.
-     */
-    fun getAppointmentsForUser(userId: String, onComplete: (List<Appointment>, String) -> Unit) {
+    fun updateAppointment(appointmentId: String, newDetails: Map<String, Any>, onComplete: (Boolean, String) -> Unit) {
         firestoreInstance.collection("appointments")
-            .whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener { result ->
-                val appointments = result.toObjects(Appointment::class.java)
-                onComplete(appointments, "Appointments fetched successfully")
+            .document(appointmentId)
+            .update(newDetails)
+            .addOnSuccessListener {
+                onComplete(true, "Appointment updated successfully")
             }
             .addOnFailureListener { exception ->
-                onComplete(emptyList(), exception.message ?: "Error fetching appointments")
+                onComplete(false, exception.message ?: "Error updating appointment")
+            }
+    }
+
+    fun cancelAppointment(appointmentId: String, onComplete: (Boolean, String) -> Unit) {
+        updateAppointment(appointmentId, mapOf("status" to "cancelled"), onComplete)
+    }
+
+    fun getBarbersByLocation(location: String, onComplete: (List<Barber>, String) -> Unit) {
+        firestoreInstance.collection("barbers")
+            .whereEqualTo("location", location)
+            .get()
+            .addOnSuccessListener { documents ->
+                val barbers = documents.toObjects(Barber::class.java)
+                onComplete(barbers, "Barbers fetched successfully")
+            }
+            .addOnFailureListener { exception ->
+                onComplete(emptyList(), exception.message ?: "Error fetching barbers by location")
+            }
+    }
+
+    fun getHairdressersByLocation(location: String, onComplete: (List<Hairdresser>, String) -> Unit) {
+        firestoreInstance.collection("hairdressers")
+            .whereEqualTo("location", location)
+            .get()
+            .addOnSuccessListener { documents ->
+                val hairdressers = documents.toObjects(Hairdresser::class.java)
+                onComplete(hairdressers, "Hairdressers fetched successfully")
+            }
+            .addOnFailureListener { exception ->
+                onComplete(emptyList(), exception.message ?: "Error fetching hairdressers by location")
+            }
+    }
+
+    fun getBarbersSortedByRating(onComplete: (List<Barber>, String) -> Unit) {
+        firestoreInstance.collection("barbers")
+            .orderBy("rating", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { documents ->
+                val barbers = documents.toObjects(Barber::class.java)
+                onComplete(barbers, "Barbers fetched successfully")
+            }
+            .addOnFailureListener { exception ->
+                onComplete(emptyList(), exception.message ?: "Error fetching barbers sorted by rating")
+            }
+    }
+
+    fun getHairdressersSortedByRating(onComplete: (List<Hairdresser>, String) -> Unit) {
+        firestoreInstance.collection("hairdressers")
+            .orderBy("rating", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { documents ->
+                val hairdressers = documents.toObjects(Hairdresser::class.java)
+                onComplete(hairdressers, "Hairdressers fetched successfully")
+            }
+            .addOnFailureListener { exception ->
+                onComplete(emptyList(), exception.message ?: "Error fetching hairdressers sorted by rating")
             }
     }
 }

@@ -6,7 +6,6 @@ import com.chiccuts.databinding.ActivityAdminBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityAdminBinding
     private val firestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
@@ -14,7 +13,6 @@ class AdminActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupListeners()
     }
 

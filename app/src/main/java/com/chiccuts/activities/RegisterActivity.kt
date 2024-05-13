@@ -11,7 +11,6 @@ import com.chiccuts.models.Hairdresser
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -20,10 +19,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-
         setupRegistration()
     }
 
@@ -37,7 +34,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnRegisterUser.setOnClickListener {
+        binding.btnRegisterHairdresser.setOnClickListener {
             val name = binding.etUsername.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
@@ -66,13 +63,9 @@ class RegisterActivity : AppCompatActivity() {
                     barberId = auth.currentUser!!.uid,
                     name = name,
                     email = email,
-                    shopName = "Default Shop", // Modify as needed or obtain from UI
-                    location = "Default Location", // Modify as needed or obtain from UI
-                    serviceTypes = listOf("Haircut", "Shave"), // Modify as needed
-                    rating = 5.0, // Default starting rating
-                    profilePictureUrl = null,
-                    isActive = true,
-                    registrationDate = Date()
+                    location = "Default Location", // Modify as needed
+                    serviceTypes = listOf("Haircut", "Shave"),
+                    rating = 5.0
                 )
                 firestore.collection("barbers").document(barber.barberId).set(barber)
                     .addOnSuccessListener {
@@ -94,13 +87,9 @@ class RegisterActivity : AppCompatActivity() {
                     hairdresserId = auth.currentUser!!.uid,
                     name = name,
                     email = email,
-                    salonName = "Default Salon", // Modify as needed or obtain from UI
-                    location = "Default Location", // Modify as needed or obtain from UI
-                    serviceTypes = listOf("Styling", "Coloring"), // Modify as needed
-                    rating = 5.0, // Default starting rating
-                    profilePictureUrl = null,
-                    isActive = true,
-                    registrationDate = Date()
+                    location = "Default Location", // Modify as needed
+                    serviceTypes = listOf("Styling", "Coloring"),
+                    rating = 5.0
                 )
                 firestore.collection("hairdressers").document(hairdresser.hairdresserId).set(hairdresser)
                     .addOnSuccessListener {

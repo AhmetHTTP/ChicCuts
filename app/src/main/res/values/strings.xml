@@ -1,17 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ChicCuts</string>
-    <string name="title_profile">Profile</string>
-    <string name="title_hairdressers">Hairdressers</string>
-    <string name="title_barbers">Barbers</string>
+    <string name="barbers">Barbers</string>
+    <string name="hairdressers">Hairdressers</string>
+    <string name="profile">Profile</string>
+    <string name="login">Login</string>
     <string name="register">Register</string>
-    <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="other">Other</string>
-    <string name="already_member">Already a member? Log in here</string>
-    <string name="register_user">Register as User</string>
-    <string name="register_barber">Register as Barber/HairDresser</string>
     <string name="logout">Logout</string>
+    <string name="username">Username</string>
 </resources>

@@ -24,7 +24,7 @@ class HairdresserAdapter : ListAdapter<Hairdresser, HairdresserAdapter.Hairdress
         fun bind(hairdresser: Hairdresser) {
             binding.tvHairdresserName.text = hairdresser.name
             binding.tvHairdresserServices.text = hairdresser.serviceTypes.joinToString(", ")
-            // Optionally add image loading here using Glide or Picasso
+            // Additional details can be added here
         }
     }
 }

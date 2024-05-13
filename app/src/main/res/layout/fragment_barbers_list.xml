@@ -4,25 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".fragments.BarbersListFragment">
-
-    <TextView
-        android:id="@+id/tvBarbersListHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Barbers Near You"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBarbersList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:padding="16dp"
         tools:listitem="@layout/item_barber" />
 
 </FrameLayout>

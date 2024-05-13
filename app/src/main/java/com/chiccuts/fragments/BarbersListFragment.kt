@@ -12,7 +12,6 @@ import com.chiccuts.models.Barber
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BarbersListFragment : Fragment() {
-
     private var _binding: FragmentBarbersListBinding? = null
     private val binding get() = _binding!!
     private lateinit var barberAdapter: BarberAdapter

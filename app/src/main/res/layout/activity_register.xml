@@ -4,113 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".activities.RegisterActivity">
-
-    <TextView
-        android:id="@+id/tvRegisterHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
 
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/username"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/tvRegisterHeader"
+        android:hint="Username"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/email"
+        android:hint="Email"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintTop_toBottomOf="@id/etUsername"
+        app:layout_constraintStart_toStartOf="@id/etUsername"
+        app:layout_constraintEnd_toEndOf="@id/etUsername"
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/password"
+        android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
-
-    <RadioGroup
-        android:id="@+id/rgGender"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
-
-        <RadioButton
-            android:id="@+id/rbMale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/male" />
-
-        <RadioButton
-            android:id="@+id/rbFemale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/female" />
-
-        <RadioButton
-            android:id="@+id/rbOther"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/other" />
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/btnRegisterUser"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/register_user"
-        app:layout_constraintTop_toBottomOf="@+id/rgGender"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintStart_toStartOf="@id/etEmail"
+        app:layout_constraintEnd_toEndOf="@id/etEmail"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btnRegisterBarber"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/register_barber"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegisterUser"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        android:text="Register as Barber"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintStart_toStartOf="@id/etPassword"
+        app:layout_constraintEnd_toEndOf="@id/etPassword"
+        android:layout_marginTop="24dp"/>
+
+    <Button
+        android:id="@+id/btnRegisterHairdresser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Register as Hairdresser"
+        app:layout_constraintTop_toBottomOf="@id/btnRegisterBarber"
+        app:layout_constraintStart_toStartOf="@id/btnRegisterBarber"
+        app:layout_constraintEnd_toEndOf="@id/btnRegisterBarber"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btnGoToLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/already_member"
-        android:background="@android:color/transparent"
-        android:textColor="@color/teal_200"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegisterBarber"
+        android:text="Back to Login"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginBottom="32dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
