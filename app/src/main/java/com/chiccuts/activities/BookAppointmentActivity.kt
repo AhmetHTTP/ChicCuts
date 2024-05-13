@@ -34,6 +34,7 @@ class BookAppointmentActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        binding.btnBack.setOnClickListener { finish() }
         binding.btnSelectDate.setOnClickListener { openDatePicker() }
         binding.btnBookAppointment.setOnClickListener {
             if (validateInputs()) {

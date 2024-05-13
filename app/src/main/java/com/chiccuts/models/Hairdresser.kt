@@ -9,8 +9,8 @@ data class Hairdresser(
     val salonName: String = "",
     val location: String = "",
     val serviceTypes: List<String> = listOf(),
-    val rating: Double = 0.0,  // Varsayılan başlangıç puanı olarak 0.0 atanabilir.
+    val rating: Double = 0.0,
     val profilePictureUrl: String? = null,
     val isActive: Boolean = true,
-    val registrationDate: Date = Date()  // Kayıt tarihi için varsayılan değer olarak mevcut tarih.
+    val registrationDate: Date = Date()
 )

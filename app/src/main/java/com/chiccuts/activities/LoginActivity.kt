@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnGoToRegister.setOnClickListener {
+        binding.tvGoToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }

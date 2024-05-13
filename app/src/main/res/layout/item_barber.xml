@@ -3,24 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="8dp">
 
+    <!-- Barber Profile Image -->
+    <ImageView
+        android:id="@+id/ivBarberProfile"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="@string/barber_profile_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Barber Name -->
     <TextView
         android:id="@+id/tvBarberName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="Barber Name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:textSize="18sp"
+        android:textColor="?attr/colorPrimary"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivBarberProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintBottom_toTopOf="@id/tvBarberServices"
+        android:layout_marginBottom="4dp"/>
 
+    <!-- Barber Services -->
     <TextView
         android:id="@+id/tvBarberServices"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Services Offered"
+        android:text="Services: Haircut, Shaving"
+        android:textSize="14sp"
+        android:textColor="?attr/colorSecondary"
+        android:fontFamily="sans-serif"
+        app:layout_constraintStart_toEndOf="@id/ivBarberProfile"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvBarberName"
-        app:layout_constraintStart_toStartOf="@id/tvBarberName"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Barber Rating -->
+    <TextView
+        android:id="@+id/tvBarberRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating: 5.0"
+        android:textSize="14sp"
+        android:textColor="?attr/colorSecondary"
+        android:fontFamily="sans-serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

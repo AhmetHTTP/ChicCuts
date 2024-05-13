@@ -10,4 +10,7 @@
     <string name="password">Password</string>
     <string name="logout">Logout</string>
     <string name="username">Username</string>
+    <string name="barber_profile_image">Barber Profile Image</string>
+    <string name="hairdresser_profile_image">Hairdresser Profile Image</string>
+    <string name="profile_image">Profile Image</string>
 </resources>

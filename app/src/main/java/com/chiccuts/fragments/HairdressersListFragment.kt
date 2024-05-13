@@ -12,6 +12,7 @@ import com.chiccuts.databinding.FragmentHairdressersListBinding
 import com.chiccuts.models.Hairdresser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.chiccuts.activities.BookAppointmentActivity
+import android.widget.Toast
 
 class HairdressersListFragment : Fragment() {
     private var _binding: FragmentHairdressersListBinding? = null
@@ -44,14 +45,18 @@ class HairdressersListFragment : Fragment() {
     }
 
     private fun loadHairdressers() {
+        binding.progressBar.visibility = View.VISIBLE
         firestoreInstance.collection("hairdressers").get()
             .addOnSuccessListener { documents ->
                 val hairdressers = documents.toObjects(Hairdresser::class.java)
                 hairdresserAdapter.submitList(hairdressers)
+                binding.progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 // Handle the error appropriately
                 exception.printStackTrace()
+                Toast.makeText(context, "Failed to load hairdressers: ${exception.message}", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
             }
     }
 

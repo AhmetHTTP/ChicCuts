@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.chiccuts.R
 import com.chiccuts.databinding.ItemHairdresserBinding
 import com.chiccuts.models.Hairdresser
 
@@ -24,7 +26,16 @@ class HairdresserAdapter(private val onClick: (Hairdresser) -> Unit) : ListAdapt
         fun bind(hairdresser: Hairdresser) {
             binding.tvHairdresserName.text = hairdresser.name
             binding.tvHairdresserServices.text = hairdresser.serviceTypes.joinToString(", ")
-            // Additional details can be added here
+            binding.tvHairdresserRating.text = "Rating: ${hairdresser.rating}"
+
+            // Load profile picture using Glide
+            if (!hairdresser.profilePictureUrl.isNullOrEmpty()) {
+                Glide.with(binding.ivHairdresserProfile.context)
+                    .load(hairdresser.profilePictureUrl)
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .into(binding.ivHairdresserProfile)
+            }
+
             binding.root.setOnClickListener {
                 onClick(hairdresser) // Trigger click listener when item is clicked
             }

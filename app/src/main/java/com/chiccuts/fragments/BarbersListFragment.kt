@@ -12,6 +12,7 @@ import com.chiccuts.databinding.FragmentBarbersListBinding
 import com.chiccuts.models.Barber
 import com.google.firebase.firestore.FirebaseFirestore
 import com.chiccuts.activities.BookAppointmentActivity
+import android.widget.Toast
 
 class BarbersListFragment : Fragment() {
     private var _binding: FragmentBarbersListBinding? = null
@@ -44,25 +45,29 @@ class BarbersListFragment : Fragment() {
     }
 
     private fun loadBarbers() {
+        binding.progressBar.visibility = View.VISIBLE
         firestoreInstance.collection("barbers").get()
             .addOnSuccessListener { documents ->
                 val barbers = documents.toObjects(Barber::class.java)
                 barberAdapter.submitList(barbers)
+                binding.progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 // Handle the error appropriately
                 exception.printStackTrace()
+                Toast.makeText(context, "Failed to load barbers: ${exception.message}", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
             }
     }
 
     private fun openBookAppointment(barber: Barber) {
-        val intent = Intent(context, BookAppointmentActivity
-        ::class.java).apply {
+        val intent = Intent(context, BookAppointmentActivity::class.java).apply {
             putExtra("BARBER_ID", barber.barberId)
             putExtra("BARBER_NAME", barber.name)
         }
         startActivity(intent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

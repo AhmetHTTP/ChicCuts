@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt") // Bu satırı ekleyin
 }
 
 android {
@@ -35,14 +36,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    // Data Binding için buildFeatures etkinleştirme
+    // Data Binding ve View Binding için buildFeatures etkinleştirme
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -56,4 +57,10 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
+    // Material Components
+    implementation("com.google.android.material:material:1.3.0")
+
+    // Glide for image loading
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    kapt("com.github.bumptech.glide:compiler:4.12.0") // Bu satırı ekleyin
 }

@@ -4,21 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.BookAppointmentActivity">
+    tools:context=".activities.BookAppointmentActivity"
+    android:padding="16dp">
 
+    <!-- Back Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Title -->
     <TextView
         android:id="@+id/tvSelectDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Date and Time"
         android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp" />
 
+    <!-- Selected Date and Time -->
     <TextView
         android:id="@+id/tvSelectedDateTime"
         android:layout_width="0dp"
@@ -26,30 +41,34 @@
         android:text="No date selected"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tvSelectDate"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp" />
 
-    <Button
+    <!-- Choose Date and Time Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSelectDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Choose Date and Time"
+        android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/tvSelectedDateTime"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
-    <Button
+    <!-- Book Appointment Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnBookAppointment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Book Appointment"
+        android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/btnSelectDate"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="24dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
