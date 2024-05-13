@@ -16,23 +16,22 @@
         android:paddingBottom="16dp"/>
 
     <EditText
-        android:id="@+id/etDate"
+        android:id="@+id/etAppointmentDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Date (e.g., MM/dd/yyyy)"
+        android:hint="Click to select date and time"
         android:focusable="false"
-        android:onClick="showDatePicker"
-        android:drawableEnd="@drawable/ic_calendar"/>
+        android:focusableInTouchMode="false"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_calendar"
+        android:onClick="openDatePicker"
+        android:padding="12dp"/>
 
-    <EditText
-        android:id="@+id/etTime"
+    <Spinner
+        android:id="@+id/spinnerBarbers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Time (e.g., HH:mm)"
-        android:focusable="false"
-        android:onClick="showTimePicker"
-        android:drawableEnd="@drawable/ic_clock"/>
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btnBookAppointment"

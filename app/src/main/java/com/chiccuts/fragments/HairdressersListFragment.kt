@@ -1,5 +1,6 @@
 package com.chiccuts.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import com.chiccuts.adapters.HairdresserAdapter
 import com.chiccuts.databinding.FragmentHairdressersListBinding
 import com.chiccuts.models.Hairdresser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.chiccuts.activities.BookAppointmentActivity
 
 class HairdressersListFragment : Fragment() {
     private var _binding: FragmentHairdressersListBinding? = null
@@ -32,7 +34,9 @@ class HairdressersListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        hairdresserAdapter = HairdresserAdapter()
+        hairdresserAdapter = HairdresserAdapter { hairdresser ->
+            openBookAppointment(hairdresser)
+        }
         binding.rvHairdressersList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = hairdresserAdapter
@@ -49,6 +53,14 @@ class HairdressersListFragment : Fragment() {
                 // Handle the error appropriately
                 exception.printStackTrace()
             }
+    }
+
+    private fun openBookAppointment(hairdresser: Hairdresser) {
+        val intent = Intent(context, BookAppointmentActivity::class.java).apply {
+            putExtra("HAIRDRESSER_ID", hairdresser.hairdresserId)
+            putExtra("HAIRDRESSER_NAME", hairdresser.name)
+        }
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

@@ -1,5 +1,6 @@
 package com.chiccuts.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import com.chiccuts.adapters.BarberAdapter
 import com.chiccuts.databinding.FragmentBarbersListBinding
 import com.chiccuts.models.Barber
 import com.google.firebase.firestore.FirebaseFirestore
+import com.chiccuts.activities.BookAppointmentActivity
 
 class BarbersListFragment : Fragment() {
     private var _binding: FragmentBarbersListBinding? = null
@@ -32,7 +34,9 @@ class BarbersListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        barberAdapter = BarberAdapter()
+        barberAdapter = BarberAdapter { barber ->
+            openBookAppointment(barber)
+        }
         binding.rvBarbersList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = barberAdapter
@@ -51,6 +55,14 @@ class BarbersListFragment : Fragment() {
             }
     }
 
+    private fun openBookAppointment(barber: Barber) {
+        val intent = Intent(context, BookAppointmentActivity
+        ::class.java).apply {
+            putExtra("BARBER_ID", barber.barberId)
+            putExtra("BARBER_NAME", barber.name)
+        }
+        startActivity(intent)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

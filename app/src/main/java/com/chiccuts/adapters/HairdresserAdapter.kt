@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chiccuts.databinding.ItemHairdresserBinding
 import com.chiccuts.models.Hairdresser
 
-class HairdresserAdapter : ListAdapter<Hairdresser, HairdresserAdapter.HairdresserViewHolder>(HairdresserDiffCallback()) {
+class HairdresserAdapter(private val onClick: (Hairdresser) -> Unit) : ListAdapter<Hairdresser, HairdresserAdapter.HairdresserViewHolder>(HairdresserDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HairdresserViewHolder {
         val binding = ItemHairdresserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return HairdresserViewHolder(binding)
+        return HairdresserViewHolder(binding, onClick)
     }
 
     override fun onBindViewHolder(holder: HairdresserViewHolder, position: Int) {
@@ -20,11 +20,14 @@ class HairdresserAdapter : ListAdapter<Hairdresser, HairdresserAdapter.Hairdress
         holder.bind(hairdresser)
     }
 
-    class HairdresserViewHolder(private val binding: ItemHairdresserBinding) : RecyclerView.ViewHolder(binding.root) {
+    class HairdresserViewHolder(private val binding: ItemHairdresserBinding, private val onClick: (Hairdresser) -> Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bind(hairdresser: Hairdresser) {
             binding.tvHairdresserName.text = hairdresser.name
             binding.tvHairdresserServices.text = hairdresser.serviceTypes.joinToString(", ")
             // Additional details can be added here
+            binding.root.setOnClickListener {
+                onClick(hairdresser) // Trigger click listener when item is clicked
+            }
         }
     }
 }

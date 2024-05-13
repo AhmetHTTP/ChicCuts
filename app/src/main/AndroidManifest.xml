@@ -15,7 +15,7 @@
         android:theme="@style/Theme.ChicCuts"
         tools:targetApi="31">
 
-        <!-- MainActivity configured as the LAUNCHER activity and exported set to true -->
+        <!-- MainActivity configured as the LAUNCHER activity -->
         <activity android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -24,12 +24,20 @@
             </intent-filter>
         </activity>
 
-        <!-- Other activities of your application. Set exported as needed. -->
+        <!-- RegisterActivity should only be accessible within the app -->
         <activity android:name=".activities.RegisterActivity"
             android:exported="false" />
+
+        <!-- LoginActivity should also only be accessible within the app -->
         <activity android:name=".activities.LoginActivity"
             android:exported="false" />
-        <!-- Add other activities with explicit exported attribute as necessary -->
+
+        <!-- BookAppointmentActivity needs to specify exported explicitly if targeting API 31 or higher -->
+        <activity android:name=".activities.BookAppointmentActivity"
+            android:exported="true" /> <!-- Check if you need this to be exported or not based on your app's navigation requirements -->
+
+        <!-- ListFragment for Barbers can be assumed to be part of MainActivity or another host activity -->
+        <!-- If any standalone activity or dialog activity is used, declare it here similarly with necessary 'exported' settings -->
 
     </application>
 </manifest>
