@@ -41,14 +41,24 @@
         android:layout_marginTop="16dp"/>
 
     <Button
-        android:id="@+id/btnRegisterBarber"
+        android:id="@+id/btnRegisterUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Register as Barber"
+        android:text="Register as User"
         app:layout_constraintTop_toBottomOf="@id/etPassword"
         app:layout_constraintStart_toStartOf="@id/etPassword"
         app:layout_constraintEnd_toEndOf="@id/etPassword"
         android:layout_marginTop="24dp"/>
+
+    <Button
+        android:id="@+id/btnRegisterBarber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Register as Barber"
+        app:layout_constraintTop_toBottomOf="@id/btnRegisterUser"
+        app:layout_constraintStart_toStartOf="@id/btnRegisterUser"
+        app:layout_constraintEnd_toEndOf="@id/btnRegisterUser"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btnRegisterHairdresser"
