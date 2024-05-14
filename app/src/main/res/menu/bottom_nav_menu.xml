@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_hairdressers"
         android:title="@string/hairdressers" />
     <item
+        android:id="@+id/nav_appointments"
+        android:icon="@drawable/ic_appointments"
+        android:title="@string/appointments" /> <!-- Yeni Randevular Menüsü -->
+    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
         android:title="@string/profile" />

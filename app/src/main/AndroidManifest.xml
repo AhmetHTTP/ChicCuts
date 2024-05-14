@@ -38,5 +38,11 @@
         <!-- ListFragment for Barbers can be assumed to be part of MainActivity or another host activity -->
         <!-- If any standalone activity or dialog activity is used, declare it here similarly with necessary 'exported' settings -->
 
+        <!-- Conditional attribute for API 33 and higher -->
+        <meta-data
+            android:name="android:enableOnBackInvokedCallback"
+            android:value="true"
+            tools:targetApi="33" />
+
     </application>
 </manifest>

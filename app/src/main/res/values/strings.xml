@@ -13,4 +13,5 @@
     <string name="barber_profile_image">Barber Profile Image</string>
     <string name="hairdresser_profile_image">Hairdresser Profile Image</string>
     <string name="profile_image">Profile Image</string>
+    <string name="appointments">Appointments</string>
 </resources>
