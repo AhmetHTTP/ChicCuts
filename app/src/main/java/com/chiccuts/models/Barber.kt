@@ -5,8 +5,9 @@ import java.util.Date
 data class Barber(
     val barberId: String = "",
     val name: String = "",
+    val username: String = "",
     val email: String = "",
-    val shopName: String = "",
+    val salonName: String = "",
     val location: String = "",
     val serviceTypes: List<String> = listOf(),
     val rating: Double = 0.0,

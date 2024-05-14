@@ -10,12 +10,14 @@ import com.chiccuts.databinding.ActivityBookAppointmentBinding
 import com.chiccuts.models.Appointment
 import com.chiccuts.utils.FirestoreUtil
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
 class BookAppointmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBookAppointmentBinding
     private lateinit var auth: FirebaseAuth
+    private var selectedDate: Date? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,7 @@ class BookAppointmentActivity : AppCompatActivity() {
             return
         }
 
+        checkUserType()
         setupListeners()
         prefillAppointmentDetails()
     }
@@ -44,10 +47,8 @@ class BookAppointmentActivity : AppCompatActivity() {
     }
 
     private fun prefillAppointmentDetails() {
-        // Example prefilling logic, which you might need to adjust based on your actual app flow
         val barberId = intent.getStringExtra("BARBER_ID")
         val hairdresserId = intent.getStringExtra("HAIRDRESSER_ID")
-        // You can fetch and display barber or hairdresser details if needed
     }
 
     private fun openDatePicker() {
@@ -57,7 +58,7 @@ class BookAppointmentActivity : AppCompatActivity() {
             selectedDate.set(year, month, dayOfMonth)
             openTimePicker(selectedDate)
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).apply {
-            datePicker.minDate = System.currentTimeMillis() - 1000 // Set minimum date to current date
+            datePicker.minDate = System.currentTimeMillis() - 1000
             show()
         }
     }
@@ -67,6 +68,7 @@ class BookAppointmentActivity : AppCompatActivity() {
             date.set(Calendar.HOUR_OF_DAY, hourOfDay)
             date.set(Calendar.MINUTE, minute)
             displaySelectedDateTime(date.time)
+            selectedDate = date.time
         }, date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE), true).show()
     }
 
@@ -76,13 +78,12 @@ class BookAppointmentActivity : AppCompatActivity() {
     }
 
     private fun bookAppointment() {
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault())
-        val date = dateFormat.parse(binding.tvSelectedDateTime.text.toString()) ?: return
+        val date = selectedDate ?: return
         val userId = auth.currentUser?.uid ?: return
         val barberId = intent.getStringExtra("BARBER_ID")
         val hairdresserId = intent.getStringExtra("HAIRDRESSER_ID")
-        val serviceType = "Haircut"  // Ideally this should be selected from the UI
-        val location = "Default Location"  // Ideally this should also be selected from the UI
+        val serviceType = "Haircut"
+        val location = "Default Location"
 
         val appointment = Appointment(
             userId = userId,
@@ -96,7 +97,7 @@ class BookAppointmentActivity : AppCompatActivity() {
         FirestoreUtil.addAppointment(appointment) { success, message ->
             if (success) {
                 showToast("Appointment booked successfully")
-                finish()  // Optionally, navigate to another screen or back to the main menu
+                finish()
             } else {
                 showToast("Error booking appointment: $message")
             }
@@ -109,11 +110,31 @@ class BookAppointmentActivity : AppCompatActivity() {
 
     private fun validateInputs(): Boolean {
         // Validate date and time
-        if (binding.tvSelectedDateTime.text.isEmpty()) {
+        if (selectedDate == null) {
             showToast("Please select a date and time for the appointment")
             return false
         }
         // Additional validation for service type and location can be added here
         return true
+    }
+
+    private fun checkUserType() {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            FirebaseFirestore.getInstance().collection("users").document(userId).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (!documentSnapshot.exists()) {
+                        showToast("Only normal users can book appointments")
+                        finish()
+                    }
+                }
+                .addOnFailureListener {
+                    showToast("Failed to check user type")
+                    finish()
+                }
+        } else {
+            showToast("User not authenticated")
+            finish()
+        }
     }
 }

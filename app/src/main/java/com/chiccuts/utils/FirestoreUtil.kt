@@ -46,6 +46,7 @@ object FirestoreUtil {
 
     fun addAppointment(appointment: Appointment, onComplete: (Boolean, String) -> Unit) {
         val appointmentRef = db.collection("appointments").document()
+        appointment.appointmentId = appointmentRef.id
         appointmentRef.set(appointment)
             .addOnSuccessListener {
                 onComplete(true, "Appointment scheduled successfully")
@@ -64,7 +65,34 @@ object FirestoreUtil {
     }
 
     fun cancelAppointment(appointmentId: String, onComplete: (Boolean, String) -> Unit) {
-        updateAppointment(appointmentId, mapOf("status" to "cancelled"), onComplete)
+        db.collection("appointments").document(appointmentId).delete()
+            .addOnSuccessListener { onComplete(true, "Appointment cancelled successfully") }
+            .addOnFailureListener { exception ->
+                onComplete(false, exception.localizedMessage ?: "Error cancelling appointment")
+            }
+    }
+
+    fun getAppointmentsForBusiness(userId: String, onComplete: (List<Appointment>, String) -> Unit) {
+        db.collection("appointments")
+            .whereEqualTo("barberId", userId)
+            .get()
+            .addOnSuccessListener { barberDocuments ->
+                val barberAppointments = barberDocuments.toObjects(Appointment::class.java)
+
+                db.collection("appointments")
+                    .whereEqualTo("hairdresserId", userId)
+                    .get()
+                    .addOnSuccessListener { hairdresserDocuments ->
+                        val hairdresserAppointments = hairdresserDocuments.toObjects(Appointment::class.java)
+                        onComplete(barberAppointments + hairdresserAppointments, "Appointments fetched successfully")
+                    }
+                    .addOnFailureListener { exception ->
+                        onComplete(emptyList(), exception.localizedMessage ?: "Error fetching appointments")
+                    }
+            }
+            .addOnFailureListener { exception ->
+                onComplete(emptyList(), exception.localizedMessage ?: "Error fetching appointments")
+            }
     }
 
     fun getBarbersByLocation(location: String, onComplete: (List<Barber>, String) -> Unit) {

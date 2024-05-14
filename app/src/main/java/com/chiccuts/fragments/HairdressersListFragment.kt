@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chiccuts.activities.BookAppointmentActivity
 import com.chiccuts.adapters.HairdresserAdapter
 import com.chiccuts.databinding.FragmentHairdressersListBinding
 import com.chiccuts.models.Hairdresser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.chiccuts.activities.BookAppointmentActivity
 import android.widget.Toast
 
 class HairdressersListFragment : Fragment() {

@@ -5,6 +5,7 @@ import java.util.Date
 data class Hairdresser(
     val hairdresserId: String = "",
     val name: String = "",
+    val username: String = "",
     val email: String = "",
     val salonName: String = "",
     val location: String = "",

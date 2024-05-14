@@ -24,17 +24,19 @@ class RegisterBusinessActivity : AppCompatActivity() {
 
         binding.btnRegister.setOnClickListener {
             val businessName = binding.etBusinessName.text.toString().trim()
+            val username = binding.etUsername.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
             val selectedBusinessTypeId = binding.rgBusinessType.checkedRadioButtonId
 
-            if (businessName.isEmpty() || email.isEmpty() || password.isEmpty() || selectedBusinessTypeId == -1) {
+            if (businessName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || selectedBusinessTypeId == -1) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val businessType = findViewById<RadioButton>(selectedBusinessTypeId).text.toString()
             val businessData = hashMapOf(
+                "username" to username,  // Ensure username is added here
                 "businessName" to businessName,
                 "email" to email,
                 "isActive" to false,
@@ -43,7 +45,7 @@ class RegisterBusinessActivity : AppCompatActivity() {
                 "profilePictureUrl" to null,
                 "rating" to 5,
                 "registrationDate" to Date(),
-                "salonName" to "",
+                "salonName" to businessName,
                 "serviceTypes" to listOf("Styling", "Coloring")
             )
 

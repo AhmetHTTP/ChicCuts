@@ -14,4 +14,22 @@
     <string name="hairdresser_profile_image">Hairdresser Profile Image</string>
     <string name="profile_image">Profile Image</string>
     <string name="appointments">Appointments</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Placeholders for User Profile -->
+    <string name="name_placeholder">Name: %1$s</string>
+    <string name="lastname_placeholder">Last Name: %1$s</string>
+    <string name="username_placeholder">Username: %1$s</string>
+    <string name="email_placeholder">Email: %1$s</string>
+
+    <!-- Placeholders for Barber and Hairdresser Profiles -->
+    <string name="salon_name_placeholder">Salon Name: %1$s</string>
+    <string name="services_placeholder">Services: %1$s</string>
+    <string name="location_placeholder">Location: %1$s</string>
+    <string name="rating_placeholder">Rating: %1$s</string>
+
+    <string name="profile_not_available">Profile not available</string>
+    <string name="email_not_available">Email not available</string>
 </resources>

@@ -1,14 +1,15 @@
 package com.chiccuts.models
 
-import com.google.firebase.Timestamp
+import java.util.Date
 
 data class User(
     val userId: String = "",
     val username: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
     val email: String = "",
-    val gender: String = "",
-    val userType: String = "",
     val profilePictureUrl: String? = null,
-    val registrationDate: Timestamp = Timestamp.now(),  // Firebase Timestamp kullanımı
+    val gender: String = "",
+    val registrationDate: Date = Date(),
     val isActive: Boolean = true
 )

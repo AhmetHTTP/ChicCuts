@@ -22,11 +22,13 @@ class RegisterUserActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
 
         binding.btnRegister.setOnClickListener {
+            val firstName = binding.etFirstName.text.toString().trim()
+            val lastName = binding.etLastName.text.toString().trim()
             val username = binding.etUsername.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
-            if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -36,6 +38,8 @@ class RegisterUserActivity : AppCompatActivity() {
                     val userId = auth.currentUser?.uid
                     if (userId != null) {
                         val user = hashMapOf(
+                            "firstName" to firstName,
+                            "lastName" to lastName,
                             "username" to username,
                             "email" to email,
                             "userId" to userId,
