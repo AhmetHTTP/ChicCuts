@@ -1,51 +1,34 @@
 package com.chiccuts.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.chiccuts.R
-import com.chiccuts.fragments.*
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.chiccuts.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val navView: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        auth = FirebaseAuth.getInstance()
 
-        navView.setOnNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_barbers -> {
-                    loadFragment(BarbersListFragment())
-                    true
-                }
-                R.id.nav_hairdressers -> {
-                    loadFragment(HairdressersListFragment())
-                    true
-                }
-                R.id.nav_appointments -> {
-                    loadFragment(AppointmentsFragment())
-                    true
-                }
-                R.id.nav_profile -> {
-                    loadFragment(ProfileFragment())
-                    true
-                }
-                else -> false
-            }
+        if (auth.currentUser == null) {
+            // Kullanıcı oturum açmamışsa, LoginActivity'e yönlendir
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish() // MainActivity'yi kapat
+            return
         }
 
-        // Varsayılan olarak BarbersListFragment yüklensin
-        if (savedInstanceState == null) {
-            loadFragment(BarbersListFragment())
-        }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
     }
 }

@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt") // Bu satırı ekleyin
+    id("kotlin-kapt")
 }
 
 android {
@@ -17,10 +17,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // Data Binding etkinleştirme
-        // dataBinding {
-        //     isEnabled = true
-        // }
     }
 
     buildTypes {
@@ -36,7 +32,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    // Data Binding ve View Binding için buildFeatures etkinleştirme
     buildFeatures {
         viewBinding = true
         dataBinding = true
@@ -44,23 +39,30 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation("androidx.core:core-ktx:+")
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // Navigation Component
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
-    // Material Components
-    implementation("com.google.android.material:material:1.3.0")
+    // Lifecycle components
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
     // Glide for image loading
     implementation("com.github.bumptech.glide:glide:4.12.0")
-    kapt("com.github.bumptech.glide:compiler:4.12.0") // Bu satırı ekleyin
+    kapt("com.github.bumptech.glide:compiler:4.12.0")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

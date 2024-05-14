@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/barbersListFragment">
+
+    <fragment
+        android:id="@+id/barbersListFragment"
+        android:name="com.chiccuts.fragments.BarbersListFragment"
+        android:label="Barbers"
+        tools:layout="@layout/fragment_barbers_list" />
+
+    <fragment
+        android:id="@+id/hairdressersListFragment"
+        android:name="com.chiccuts.fragments.HairdressersListFragment"
+        android:label="Hairdressers"
+        tools:layout="@layout/fragment_hairdressers_list" />
+
+    <fragment
+        android:id="@+id/appointmentsFragment"
+        android:name="com.chiccuts.fragments.AppointmentsFragment"
+        android:label="Appointments"
+        tools:layout="@layout/fragment_appointments" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.chiccuts.fragments.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>

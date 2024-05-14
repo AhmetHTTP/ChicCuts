@@ -27,6 +27,14 @@
         <activity android:name=".activities.RegisterActivity"
             android:exported="false" />
 
+        <!-- RegisterUserActivity should also only be accessible within the app -->
+        <activity android:name=".activities.RegisterUserActivity"
+            android:exported="false" />
+
+        <!-- RegisterBusinessActivity should also only be accessible within the app -->
+        <activity android:name=".activities.RegisterBusinessActivity"
+            android:exported="false" />
+
         <!-- LoginActivity should also only be accessible within the app -->
         <activity android:name=".activities.LoginActivity"
             android:exported="false" />
@@ -34,9 +42,6 @@
         <!-- BookAppointmentActivity needs to specify exported explicitly if targeting API 31 or higher -->
         <activity android:name=".activities.BookAppointmentActivity"
             android:exported="true" /> <!-- Check if you need this to be exported or not based on your app's navigation requirements -->
-
-        <!-- ListFragment for Barbers can be assumed to be part of MainActivity or another host activity -->
-        <!-- If any standalone activity or dialog activity is used, declare it here similarly with necessary 'exported' settings -->
 
         <!-- Conditional attribute for API 33 and higher -->
         <meta-data

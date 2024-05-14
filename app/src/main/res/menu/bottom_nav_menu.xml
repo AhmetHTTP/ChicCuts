@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_barbers"
+        android:id="@+id/barbersListFragment"
         android:icon="@drawable/ic_barbers"
         android:title="@string/barbers" />
     <item
-        android:id="@+id/nav_hairdressers"
+        android:id="@+id/hairdressersListFragment"
         android:icon="@drawable/ic_hairdressers"
         android:title="@string/hairdressers" />
     <item
-        android:id="@+id/nav_appointments"
+        android:id="@+id/appointmentsFragment"
         android:icon="@drawable/ic_appointments"
-        android:title="@string/appointments" /> <!-- Yeni Randevular Menüsü -->
+        android:title="@string/appointments" />
     <item
-        android:id="@+id/nav_profile"
+        android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
         android:title="@string/profile" />
 </menu>

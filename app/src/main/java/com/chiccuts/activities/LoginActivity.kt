@@ -17,6 +17,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
+        // Giriş butonuna tıklama işlemi
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
@@ -28,11 +29,13 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        // Kayıt olma sayfasına yönlendirme
         binding.tvGoToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 
+    // Kullanıcı giriş işlemi
     private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
@@ -43,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    // Giriş başarılı olduğunda MainActivity'ye yönlendirme
     private fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
