@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.chiccuts.databinding.ItemAppointmentBinding
 import com.chiccuts.databinding.ItemAppointmentBusinessBinding
 import com.chiccuts.models.Appointment
-import com.google.firebase.firestore.FirebaseFirestore
+import com.chiccuts.utils.FirestoreUtil
 
 class AppointmentAdapter(
     private val isBusiness: Boolean,
@@ -28,7 +28,7 @@ class AppointmentAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_BUSINESS) {
             val binding = ItemAppointmentBusinessBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            BusinessViewHolder(binding)
+            BusinessViewHolder(binding, this)
         } else {
             val binding = ItemAppointmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             NormalViewHolder(binding, this)
@@ -63,28 +63,24 @@ class AppointmentAdapter(
 
             binding.btnCancelAppointment.setOnClickListener {
                 if (appointment.appointmentId.isNotBlank()) {
-                    cancelAppointment(appointment.appointmentId)
+                    FirestoreUtil.cancelAppointment(appointment.appointmentId) { success, message ->
+                        if (success) {
+                            adapter.removeAppointment(appointment.appointmentId)
+                        } else {
+                            println("Error cancelling appointment: $message")
+                        }
+                    }
                 } else {
                     println("Invalid appointment ID")
                 }
             }
         }
-
-        private fun cancelAppointment(appointmentId: String) {
-            val firestore = FirebaseFirestore.getInstance()
-            firestore.collection("appointments").document(appointmentId)
-                .delete()
-                .addOnSuccessListener {
-                    println("Appointment successfully deleted")
-                    adapter.removeAppointment(appointmentId)
-                }
-                .addOnFailureListener { e ->
-                    e.printStackTrace()
-                }
-        }
     }
 
-    class BusinessViewHolder(private val binding: ItemAppointmentBusinessBinding) : RecyclerView.ViewHolder(binding.root) {
+    class BusinessViewHolder(
+        private val binding: ItemAppointmentBusinessBinding,
+        private val adapter: AppointmentAdapter
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(appointment: Appointment) {
             binding.tvAppointmentTime.text = appointment.appointmentTime.toString()
             binding.tvUsername.text = appointment.userUsername
@@ -92,24 +88,17 @@ class AppointmentAdapter(
 
             binding.btnCancelAppointment.setOnClickListener {
                 if (appointment.appointmentId.isNotBlank()) {
-                    cancelAppointment(appointment.appointmentId)
+                    FirestoreUtil.cancelAppointment(appointment.appointmentId) { success, message ->
+                        if (success) {
+                            adapter.removeAppointment(appointment.appointmentId)
+                        } else {
+                            println("Error cancelling appointment: $message")
+                        }
+                    }
                 } else {
                     println("Invalid appointment ID")
                 }
             }
-        }
-
-        private fun cancelAppointment(appointmentId: String) {
-            val firestore = FirebaseFirestore.getInstance()
-            firestore.collection("appointments").document(appointmentId)
-                .delete()
-                .addOnSuccessListener {
-                    println("Appointment successfully deleted")
-                    (binding.root.context as? AppointmentAdapter)?.removeAppointment(appointmentId)
-                }
-                .addOnFailureListener { e ->
-                    e.printStackTrace()
-                }
         }
     }
 

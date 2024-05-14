@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- RecyclerView for displaying the list of appointments -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAppointments"
         android:layout_width="0dp"
@@ -17,7 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- TextView for indicating no appointments -->
     <TextView
         android:id="@+id/tvNoAppointments"
         android:layout_width="wrap_content"
@@ -30,7 +28,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- ProgressBar for indicating loading state -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

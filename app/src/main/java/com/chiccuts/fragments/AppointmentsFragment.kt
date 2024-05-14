@@ -1,23 +1,25 @@
 package com.chiccuts.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chiccuts.adapters.AppointmentAdapter
 import com.chiccuts.databinding.FragmentAppointmentsBinding
-import com.chiccuts.models.Appointment
 import com.chiccuts.utils.FirestoreUtil
+import com.chiccuts.viewmodels.AppointmentViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class AppointmentsFragment : Fragment() {
     private var _binding: FragmentAppointmentsBinding? = null
     private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
+    private lateinit var appointmentViewModel: AppointmentViewModel
     private lateinit var appointmentAdapter: AppointmentAdapter
     private var isBusinessUser = false
 
@@ -27,7 +29,7 @@ class AppointmentsFragment : Fragment() {
     ): View {
         _binding = FragmentAppointmentsBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        appointmentViewModel = ViewModelProvider(this).get(AppointmentViewModel::class.java)
         return binding.root
     }
 
@@ -43,29 +45,22 @@ class AppointmentsFragment : Fragment() {
     private fun checkUserType(callback: (Boolean) -> Unit) {
         val userId = auth.currentUser?.uid ?: return callback(false)
 
-        firestore.collection("users").document(userId).get()
-            .addOnSuccessListener { _ ->
-                callback(false)
-            }
-            .addOnFailureListener {
-                firestore.collection("barbers").document(userId).get()
-                    .addOnSuccessListener { barberDocSnapshot ->
-                        if (barberDocSnapshot.exists()) {
-                            callback(true)
-                        } else {
-                            firestore.collection("hairdressers").document(userId).get()
-                                .addOnSuccessListener { hairdresserDocSnapshot ->
-                                    callback(hairdresserDocSnapshot.exists())
-                                }
-                                .addOnFailureListener {
-                                    callback(false)
-                                }
+        // Check if user is a barber or hairdresser
+        FirestoreUtil.getUser(userId) { user, _ ->
+            if (user != null) {
+                callback(false) // User is a normal user
+            } else {
+                FirestoreUtil.getBarber(userId) { barber, _ ->
+                    if (barber != null) {
+                        callback(true) // User is a barber
+                    } else {
+                        FirestoreUtil.getHairdresser(userId) { hairdresser, _ ->
+                            callback(hairdresser != null) // User is a hairdresser
                         }
                     }
-                    .addOnFailureListener {
-                        callback(false)
-                    }
+                }
             }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -80,55 +75,17 @@ class AppointmentsFragment : Fragment() {
 
     private fun loadAppointments() {
         val userId = auth.currentUser?.uid ?: return
-
         binding.progressBar.visibility = View.VISIBLE
 
-        if (isBusinessUser) {
-            loadBusinessAppointments(userId)
-        } else {
-            loadUserAppointments(userId)
+        appointmentViewModel.fetchAppointments(userId, isBusinessUser) { appointments ->
+            Log.d("AppointmentsFragment", "Appointments loaded: ${appointments.size}")
         }
-    }
 
-    private fun loadUserAppointments(userId: String) {
-        firestore.collection("appointments")
-            .whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener { documents ->
-                val appointments = documents.map { document ->
-                    val appointment = document.toObject(Appointment::class.java).apply {
-                        appointmentId = document.id
-                    }
-                    val businessId = appointment.barberId ?: appointment.hairdresserId
-                    businessId?.let {
-                        firestore.collection(if (appointment.barberId != null) "barbers" else "hairdressers").document(it)
-                            .get()
-                            .addOnSuccessListener { businessDoc ->
-                                appointment.salonName = businessDoc.getString("salonName") ?: ""
-                                appointment.rating = businessDoc.getDouble("rating") ?: 0.0
-                                appointment.profilePictureUrl = businessDoc.getString("profilePictureUrl")
-                                appointmentAdapter.notifyDataSetChanged()
-                            }
-                    }
-                    appointment
-                }.toMutableList()
-                appointmentAdapter.submitList(appointments)
-                binding.tvNoAppointments.visibility = if (appointments.isEmpty()) View.VISIBLE else View.GONE
-                binding.progressBar.visibility = View.GONE
-            }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
-                binding.tvNoAppointments.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.GONE
-            }
-    }
-
-    private fun loadBusinessAppointments(userId: String) {
-        FirestoreUtil.getAppointmentsForBusiness(userId) { appointments, message ->
+        appointmentViewModel.getAppointments().observe(viewLifecycleOwner, Observer { appointments ->
             appointmentAdapter.submitList(appointments)
             binding.tvNoAppointments.visibility = if (appointments.isEmpty()) View.VISIBLE else View.GONE
             binding.progressBar.visibility = View.GONE
-        }
+        })
     }
 
     override fun onDestroyView() {

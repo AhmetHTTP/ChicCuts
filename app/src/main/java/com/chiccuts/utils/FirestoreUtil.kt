@@ -1,9 +1,6 @@
 package com.chiccuts.utils
 
-import com.chiccuts.models.User
-import com.chiccuts.models.Barber
-import com.chiccuts.models.Hairdresser
-import com.chiccuts.models.Appointment
+import com.chiccuts.models.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
@@ -25,6 +22,26 @@ object FirestoreUtil {
             }
             .addOnFailureListener { exception ->
                 onComplete(null, exception.localizedMessage ?: "Error fetching user")
+            }
+    }
+
+    fun getBarber(barberId: String, onComplete: (Barber?, String) -> Unit) {
+        db.collection("barbers").document(barberId).get()
+            .addOnSuccessListener { document ->
+                onComplete(document.toObject(Barber::class.java), "Barber fetched successfully")
+            }
+            .addOnFailureListener { exception ->
+                onComplete(null, exception.localizedMessage ?: "Error fetching barber")
+            }
+    }
+
+    fun getHairdresser(hairdresserId: String, onComplete: (Hairdresser?, String) -> Unit) {
+        db.collection("hairdressers").document(hairdresserId).get()
+            .addOnSuccessListener { document ->
+                onComplete(document.toObject(Hairdresser::class.java), "Hairdresser fetched successfully")
+            }
+            .addOnFailureListener { exception ->
+                onComplete(null, exception.localizedMessage ?: "Error fetching hairdresser")
             }
     }
 
@@ -72,27 +89,45 @@ object FirestoreUtil {
             }
     }
 
-    fun getAppointmentsForBusiness(userId: String, onComplete: (List<Appointment>, String) -> Unit) {
-        db.collection("appointments")
-            .whereEqualTo("barberId", userId)
-            .get()
-            .addOnSuccessListener { barberDocuments ->
-                val barberAppointments = barberDocuments.toObjects(Appointment::class.java)
+    fun getAppointments(userId: String, isBusinessOwner: Boolean, onComplete: (List<Appointment>) -> Unit) {
+        val collectionRef = db.collection("appointments")
+        if (isBusinessOwner) {
+            val appointments = mutableListOf<Appointment>()
+            collectionRef.whereEqualTo("barberId", userId)
+                .get()
+                .addOnSuccessListener { barberDocuments ->
+                    val barberAppointments = barberDocuments.toObjects(Appointment::class.java)
+                    appointments.addAll(barberAppointments)
 
-                db.collection("appointments")
-                    .whereEqualTo("hairdresserId", userId)
-                    .get()
-                    .addOnSuccessListener { hairdresserDocuments ->
-                        val hairdresserAppointments = hairdresserDocuments.toObjects(Appointment::class.java)
-                        onComplete(barberAppointments + hairdresserAppointments, "Appointments fetched successfully")
+                    collectionRef.whereEqualTo("hairdresserId", userId)
+                        .get()
+                        .addOnSuccessListener { hairdresserDocuments ->
+                            val hairdresserAppointments = hairdresserDocuments.toObjects(Appointment::class.java)
+                            appointments.addAll(hairdresserAppointments)
+                            onComplete(appointments)
+                        }
+                        .addOnFailureListener { e ->
+                            onComplete(emptyList())
+                        }
+                }
+                .addOnFailureListener { e ->
+                    onComplete(emptyList())
+                }
+        } else {
+            collectionRef.whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener { documents ->
+                    val appointments = documents.map { document ->
+                        document.toObject(Appointment::class.java).apply {
+                            appointmentId = document.id
+                        }
                     }
-                    .addOnFailureListener { exception ->
-                        onComplete(emptyList(), exception.localizedMessage ?: "Error fetching appointments")
-                    }
-            }
-            .addOnFailureListener { exception ->
-                onComplete(emptyList(), exception.localizedMessage ?: "Error fetching appointments")
-            }
+                    onComplete(appointments)
+                }
+                .addOnFailureListener { e ->
+                    onComplete(emptyList())
+                }
+        }
     }
 
     fun getBarbersByLocation(location: String, onComplete: (List<Barber>, String) -> Unit) {

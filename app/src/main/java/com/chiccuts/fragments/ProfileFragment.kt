@@ -122,20 +122,29 @@ class ProfileFragment : Fragment() {
                 val salonName = documentSnapshot.getString("salonName")
                 val profilePictureUrl = documentSnapshot.getString("profilePictureUrl")
                 if (username != null && email != null) {
-                    binding.tvUsername.text = getString(R.string.username_placeholder, username)
-                    binding.tvName.text = getString(R.string.salon_name_placeholder, salonName)
-                    binding.tvEmail.text = getString(R.string.email_placeholder, email)
-                    if (!profilePictureUrl.isNullOrEmpty()) {
-                        Glide.with(this).load(profilePictureUrl).into(binding.ivProfileImage)
+                    // _binding null olabilir, kontrol etmeniz gerekiyor
+                    _binding?.let {
+                        it.tvUsername.text = getString(R.string.username_placeholder, username)
+                        it.tvName.text = getString(R.string.salon_name_placeholder, salonName)
+                        it.tvEmail.text = getString(R.string.email_placeholder, email)
+                        if (!profilePictureUrl.isNullOrEmpty()) {
+                            Glide.with(this).load(profilePictureUrl).into(it.ivProfileImage)
+                        }
                     }
                 } else {
-                    binding.tvUsername.text = "Profile not available"
-                    binding.tvEmail.text = "Email not available"
+                    // _binding null olabilir, kontrol etmeniz gerekiyor
+                    _binding?.let {
+                        it.tvUsername.text = "Profile not available"
+                        it.tvEmail.text = "Email not available"
+                    }
                 }
             }
             .addOnFailureListener {
-                binding.tvUsername.text = "Profile not available"
-                binding.tvEmail.text = "Email not available"
+                // _binding null olabilir, kontrol etmeniz gerekiyor
+                _binding?.let {
+                    it.tvUsername.text = "Profile not available"
+                    it.tvEmail.text = "Email not available"
+                }
                 Toast.makeText(context, "Failed to load any profile: ${it.message}", Toast.LENGTH_LONG).show()
             }
     }
