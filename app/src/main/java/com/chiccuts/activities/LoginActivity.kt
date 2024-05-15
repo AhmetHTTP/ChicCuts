@@ -2,6 +2,7 @@ package com.chiccuts.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chiccuts.databinding.ActivityLoginBinding
@@ -17,7 +18,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
-        // Giriş butonuna tıklama işlemi
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
@@ -29,24 +29,24 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // Kayıt olma sayfasına yönlendirme
         binding.tvGoToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 
-    // Kullanıcı giriş işlemi
     private fun loginUser(email: String, password: String) {
+        Log.d("LoginActivity", "Attempting to log in user with email: $email")
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
+                Log.d("LoginActivity", "Login successful")
                 navigateToMain()
             } else {
+                Log.e("LoginActivity", "Authentication failed: ${task.exception?.message}")
                 Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    // Giriş başarılı olduğunda MainActivity'ye yönlendirme
     private fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
