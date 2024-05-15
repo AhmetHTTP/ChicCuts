@@ -85,6 +85,8 @@ class AppointmentAdapter(
             binding.tvAppointmentTime.text = appointment.appointmentTime.toString()
             binding.tvUsername.text = appointment.userUsername
             binding.tvUserFullName.text = "${appointment.userFirstName} ${appointment.userLastName}"
+            binding.tvServiceType.text = appointment.serviceType
+            binding.tvLocation.text = appointment.location
 
             binding.btnCancelAppointment.setOnClickListener {
                 if (appointment.appointmentId.isNotBlank()) {

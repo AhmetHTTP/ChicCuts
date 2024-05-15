@@ -46,15 +46,15 @@ class AppointmentsFragment : Fragment() {
         val userId = auth.currentUser?.uid ?: return callback(false)
 
         // Check if user is a barber or hairdresser
-        FirestoreUtil.getUser(userId) { user, _ ->
+        FirestoreUtil.getUser(userId) { user ->
             if (user != null) {
                 callback(false) // User is a normal user
             } else {
-                FirestoreUtil.getBarber(userId) { barber, _ ->
+                FirestoreUtil.getBarber(userId) { barber ->
                     if (barber != null) {
                         callback(true) // User is a barber
                     } else {
-                        FirestoreUtil.getHairdresser(userId) { hairdresser, _ ->
+                        FirestoreUtil.getHairdresser(userId) { hairdresser ->
                             callback(hairdresser != null) // User is a hairdresser
                         }
                     }
@@ -77,11 +77,9 @@ class AppointmentsFragment : Fragment() {
         val userId = auth.currentUser?.uid ?: return
         binding.progressBar.visibility = View.VISIBLE
 
-        appointmentViewModel.fetchAppointments(userId, isBusinessUser) { appointments ->
-            Log.d("AppointmentsFragment", "Appointments loaded: ${appointments.size}")
-        }
+        appointmentViewModel.fetchAppointments(userId, isBusinessUser)
 
-        appointmentViewModel.getAppointments().observe(viewLifecycleOwner, Observer { appointments ->
+        appointmentViewModel.appointments.observe(viewLifecycleOwner, Observer { appointments ->
             appointmentAdapter.submitList(appointments)
             binding.tvNoAppointments.visibility = if (appointments.isEmpty()) View.VISIBLE else View.GONE
             binding.progressBar.visibility = View.GONE

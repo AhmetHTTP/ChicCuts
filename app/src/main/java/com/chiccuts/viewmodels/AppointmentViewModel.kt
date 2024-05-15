@@ -3,55 +3,46 @@ package com.chiccuts.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.chiccuts.models.Appointment
 import com.chiccuts.utils.FirestoreUtil
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class AppointmentViewModel : ViewModel() {
-    private val appointments = MutableLiveData<List<Appointment>>()
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun bookAppointment(appointment: Appointment, onComplete: (Boolean, String) -> Unit) {
-        FirestoreUtil.addAppointment(appointment) { success, message ->
-            onComplete(success, message)
-        }
-    }
+    private val _appointments = MutableLiveData<List<Appointment>>()
+    val appointments: LiveData<List<Appointment>> = _appointments
 
-    fun updateAppointment(appointmentId: String, newDetails: Map<String, Any>, onComplete: (Boolean, String) -> Unit) {
-        FirestoreUtil.updateAppointment(appointmentId, newDetails) { success, message ->
-            onComplete(success, message)
-        }
-    }
+    private val _appointmentStatus = MutableLiveData<String>()
+    val appointmentStatus: LiveData<String> = _appointmentStatus
 
-    fun cancelAppointment(appointmentId: String, onComplete: (Boolean, String) -> Unit) {
-        FirestoreUtil.cancelAppointment(appointmentId) { success, message ->
-            if (success) {
-                fetchAppointmentsForCurrentUser()
+    fun fetchAppointments(userId: String, isBusinessUser: Boolean) {
+        viewModelScope.launch {
+            FirestoreUtil.getAppointments(userId, isBusinessUser) { appointments ->
+                _appointments.postValue(appointments)
             }
-            onComplete(success, message)
         }
     }
 
-    fun fetchAppointments(userId: String, isBusinessOwner: Boolean, onComplete: (List<Appointment>) -> Unit) {
-        FirestoreUtil.getAppointments(userId, isBusinessOwner) { appointments ->
-            this.appointments.postValue(appointments)
-            onComplete(appointments)
+    fun addAppointment(appointment: Appointment) {
+        viewModelScope.launch {
+            FirestoreUtil.addAppointment(appointment) { success, message ->
+                _appointmentStatus.postValue(message)
+                if (success) {
+                    fetchAppointments(appointment.userId, false)
+                }
+            }
         }
     }
 
-    fun fetchAppointmentsForCurrentUser() {
-        val currentUser = getCurrentUser()
-        fetchAppointments(currentUser.first, currentUser.second) { }
-    }
-
-    fun getAppointments(): LiveData<List<Appointment>> {
-        return appointments
-    }
-
-    private fun getCurrentUser(): Pair<String, Boolean> {
-        val userId = auth.currentUser?.uid ?: ""
-        // You should replace this with actual logic to determine if the user is a business owner
-        val isBusinessOwner = false // Change this to the actual check
-        return Pair(userId, isBusinessOwner)
+    fun cancelAppointment(appointmentId: String) {
+        viewModelScope.launch {
+            FirestoreUtil.cancelAppointment(appointmentId) { success, message ->
+                if (success) {
+                    _appointments.value = _appointments.value?.filter { it.appointmentId != appointmentId }
+                }
+                _appointmentStatus.postValue(message)
+            }
+        }
     }
 }

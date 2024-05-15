@@ -16,10 +16,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tvUsername"
+        android:id="@+id/tvUserFullName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Username"
+        android:text="Full Name"
         android:textSize="16sp"
         android:textColor="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,13 +27,13 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tvUserFullName"
+        android:id="@+id/tvUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Full Name"
+        android:text="Username"
         android:textSize="14sp"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintTop_toBottomOf="@id/tvUsername"
+        app:layout_constraintTop_toBottomOf="@id/tvUserFullName"
         app:layout_constraintStart_toEndOf="@id/ivProfileImage"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -44,7 +44,7 @@
         android:text="Appointment Time"
         android:textSize="14sp"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintTop_toBottomOf="@id/tvUserFullName"
+        app:layout_constraintTop_toBottomOf="@id/tvUsername"
         app:layout_constraintStart_toEndOf="@id/ivProfileImage"
         app:layout_constraintEnd_toEndOf="parent" />
 

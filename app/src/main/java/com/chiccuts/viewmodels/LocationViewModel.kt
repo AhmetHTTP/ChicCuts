@@ -8,23 +8,22 @@ import com.chiccuts.models.Hairdresser
 import com.chiccuts.utils.FirestoreUtil
 
 class LocationViewModel : ViewModel() {
+
     private val _barbers = MutableLiveData<List<Barber>>()
     val barbers: LiveData<List<Barber>> = _barbers
 
     private val _hairdressers = MutableLiveData<List<Hairdresser>>()
     val hairdressers: LiveData<List<Hairdresser>> = _hairdressers
 
-    fun loadBarbersByLocation(location: String) {
-        FirestoreUtil.getBarbersByLocation(location) { barbersList, message ->
-            _barbers.value = barbersList
-            // İhtiyaca göre 'message' ile ilgili işlem yapılabilir. Örneğin, bir log kaydı veya kullanıcıya bilgi verme.
+    fun fetchBarbersByLocation(location: String) {
+        FirestoreUtil.getBarbersByLocation(location) { barbers ->
+            _barbers.postValue(barbers)
         }
     }
 
-    fun loadHairdressersByLocation(location: String) {
-        FirestoreUtil.getHairdressersByLocation(location) { hairdressersList, message ->
-            _hairdressers.value = hairdressersList
-            // İhtiyaca göre 'message' ile ilgili işlem yapılabilir. Örneğin, bir log kaydı veya kullanıcıya bilgi verme.
+    fun fetchHairdressersByLocation(location: String) {
+        FirestoreUtil.getHairdressersByLocation(location) { hairdressers ->
+            _hairdressers.postValue(hairdressers)
         }
     }
 }
