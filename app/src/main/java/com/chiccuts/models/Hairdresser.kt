@@ -5,10 +5,9 @@ import java.util.Date
 data class Hairdresser(
     val hairdresserId: String = "",
     val businessName: String = "",
-    val name: String = "",
     val username: String = "",
     val email: String = "",
-    val salonName: String = "",
+    val salonName: String = "",  // "name" yerine "salonName" kullanıyoruz
     val location: String = "",
     val serviceTypes: List<String> = listOf(),
     val rating: Double = 0.0,

@@ -63,7 +63,7 @@ class BarbersListFragment : Fragment() {
     private fun openBookAppointment(barber: Barber) {
         val intent = Intent(context, BookAppointmentActivity::class.java).apply {
             putExtra("BARBER_ID", barber.barberId)
-            putExtra("BARBER_NAME", barber.name)
+            putExtra("SALON_NAME", barber.salonName)  // "name" yerine "salonName" kullanıyoruz
         }
         startActivity(intent)
     }

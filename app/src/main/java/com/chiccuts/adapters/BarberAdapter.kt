@@ -24,7 +24,7 @@ class BarberAdapter(private val onClick: (Barber) -> Unit) : ListAdapter<Barber,
 
     class BarberViewHolder(private val binding: ItemBarberBinding, private val onClick: (Barber) -> Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bind(barber: Barber) {
-            binding.tvBarberName.text = barber.name
+            binding.tvBarberName.text = barber.salonName  // "name" yerine "salonName" kullanıyoruz
             binding.tvBarberServices.text = barber.serviceTypes.joinToString(", ")
             binding.tvBarberRating.text = "Rating: ${barber.rating}"
 

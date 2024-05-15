@@ -83,10 +83,16 @@ class AppointmentAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(appointment: Appointment) {
             binding.tvAppointmentTime.text = appointment.appointmentTime.toString()
-            binding.tvUsername.text = appointment.userUsername
-            binding.tvUserFullName.text = "${appointment.userFirstName} ${appointment.userLastName}"
             binding.tvServiceType.text = appointment.serviceType
             binding.tvLocation.text = appointment.location
+            binding.tvSalonName.text = appointment.salonName  // Sadece salonName bilgisi gösteriliyor
+            binding.tvRating.text = "Rating: ${appointment.rating}"
+
+            if (!appointment.profilePictureUrl.isNullOrEmpty()) {
+                Glide.with(binding.ivProfileImage.context)
+                    .load(appointment.profilePictureUrl)
+                    .into(binding.ivProfileImage)
+            }
 
             binding.btnCancelAppointment.setOnClickListener {
                 if (appointment.appointmentId.isNotBlank()) {

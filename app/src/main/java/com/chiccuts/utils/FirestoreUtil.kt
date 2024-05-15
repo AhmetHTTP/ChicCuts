@@ -2,7 +2,6 @@ package com.chiccuts.utils
 
 import com.chiccuts.models.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.tasks.await
 
 object FirestoreUtil {
@@ -61,14 +60,14 @@ object FirestoreUtil {
                 if (appointment.barberId != null) {
                     val barber = db.collection("barbers").document(appointment.barberId!!).get().await().toObject(Barber::class.java)
                     if (barber != null) {
-                        appointment.salonName = barber.salonName
+                        appointment.salonName = barber.salonName  // "name" yerine "salonName" kullanıyoruz
                         appointment.rating = barber.rating
                         appointment.profilePictureUrl = barber.profilePictureUrl
                     }
                 } else if (appointment.hairdresserId != null) {
                     val hairdresser = db.collection("hairdressers").document(appointment.hairdresserId!!).get().await().toObject(Hairdresser::class.java)
                     if (hairdresser != null) {
-                        appointment.salonName = hairdresser.salonName
+                        appointment.salonName = hairdresser.salonName  // "name" yerine "salonName" kullanıyoruz
                         appointment.rating = hairdresser.rating
                         appointment.profilePictureUrl = hairdresser.profilePictureUrl
                     }

@@ -52,6 +52,8 @@ class BookAppointmentActivity : AppCompatActivity() {
     private fun prefillAppointmentDetails() {
         val barberId = intent.getStringExtra("BARBER_ID")
         val hairdresserId = intent.getStringExtra("HAIRDRESSER_ID")
+        val salonName = intent.getStringExtra("SALON_NAME")  // Bu satırı ekleyin
+        binding.tvSalonName.text = salonName  // Bu satırı ekleyin
     }
 
     private fun openDatePicker() {
@@ -85,6 +87,7 @@ class BookAppointmentActivity : AppCompatActivity() {
         val userId = auth.currentUser?.uid ?: return
         val barberId = intent.getStringExtra("BARBER_ID")
         val hairdresserId = intent.getStringExtra("HAIRDRESSER_ID")
+        val salonName = intent.getStringExtra("SALON_NAME") ?: ""  // Bu satırı ekleyin
         val serviceType = "Haircut"
         val location = "Default Location"
 
@@ -94,7 +97,8 @@ class BookAppointmentActivity : AppCompatActivity() {
             hairdresserId = hairdresserId,
             serviceType = serviceType,
             appointmentTime = date,
-            location = location
+            location = location,
+            salonName = salonName  // Bu satırı ekleyin
         )
 
         appointmentViewModel.addAppointment(appointment)

@@ -24,7 +24,7 @@ class HairdresserAdapter(private val onClick: (Hairdresser) -> Unit) : ListAdapt
 
     class HairdresserViewHolder(private val binding: ItemHairdresserBinding, private val onClick: (Hairdresser) -> Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bind(hairdresser: Hairdresser) {
-            binding.tvHairdresserName.text = hairdresser.name
+            binding.tvHairdresserName.text = hairdresser.salonName  // "name" yerine "salonName" kullanıyoruz
             binding.tvHairdresserServices.text = hairdresser.serviceTypes.joinToString(", ")
             binding.tvHairdresserRating.text = "Rating: ${hairdresser.rating}"
 

@@ -47,6 +47,21 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 
+    <!-- Salon Name -->
+    <TextView
+        android:id="@+id/tvSalonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Salon Name"
+        android:textSize="18sp"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectedDateTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
     <!-- Choose Date and Time Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSelectDate"
@@ -54,7 +69,7 @@
         android:layout_height="wrap_content"
         android:text="Choose Date and Time"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectedDateTime"
+        app:layout_constraintTop_toBottomOf="@id/tvSalonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />

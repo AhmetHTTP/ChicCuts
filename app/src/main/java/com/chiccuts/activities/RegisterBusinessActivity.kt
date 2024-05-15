@@ -41,11 +41,10 @@ class RegisterBusinessActivity : AppCompatActivity() {
                 "email" to email,
                 "isActive" to false,
                 "location" to "Default Location",
-                "name" to businessName,
+                "salonName" to businessName,  // "name" yerine "salonName" kullanıyoruz
                 "profilePictureUrl" to null,
                 "rating" to 5,
                 "registrationDate" to Date(),
-                "salonName" to businessName,
                 "serviceTypes" to listOf("Styling", "Coloring")
             )
 
