@@ -1,7 +1,9 @@
 package com.chiccuts.fragments
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,14 +18,18 @@ import com.chiccuts.databinding.FragmentProfileBinding
 import com.chiccuts.models.Barber
 import com.chiccuts.models.Hairdresser
 import com.chiccuts.models.User
+import com.chiccuts.utils.FirestoreUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+
+    private val PICK_IMAGE_REQUEST = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +65,64 @@ class ProfileFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+
+        // ImageView için onClickListener ekleyelim
+        binding.ivProfileImage.setOnClickListener {
+            openFileChooser()
+        }
+    }
+
+    private fun openFileChooser() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK
+            && data != null && data.data != null) {
+            val imageUri = data.data
+
+            binding.ivProfileImage.setImageURI(imageUri)
+
+            uploadImageToFirebaseStorage(imageUri!!)
+        }
+    }
+
+    private fun uploadImageToFirebaseStorage(imageUri: Uri) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val storageReference = FirebaseStorage.getInstance().getReference("profile_pictures/${user.uid}")
+
+            storageReference.putFile(imageUri)
+                .addOnSuccessListener { taskSnapshot ->
+                    storageReference.downloadUrl.addOnSuccessListener { uri ->
+                        saveImageUrlToFirestore(uri.toString())
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Upload failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun saveImageUrlToFirestore(downloadUrl: String) {
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        FirestoreUtil.updateProfilePictureUrl(userId, downloadUrl) { success, message ->
+            if (success) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                // Yeni fotoğrafı hemen güncelle
+                Glide.with(this).load(downloadUrl).placeholder(R.drawable.ic_default_avatar).into(binding.ivProfileImage)
+            } else {
+                Toast.makeText(context, "Error updating profile picture: $message", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun loadUserProfile() {
@@ -77,7 +141,12 @@ class ProfileFragment : Fragment() {
                         binding.tvName.text = getString(R.string.name_placeholder, "$firstName $lastName")
                         binding.tvEmail.text = getString(R.string.email_placeholder, email)
                         if (!profilePictureUrl.isNullOrEmpty()) {
-                            Glide.with(this).load(profilePictureUrl).into(binding.ivProfileImage)
+                            Glide.with(this)
+                                .load(profilePictureUrl)
+                                .placeholder(R.drawable.ic_default_avatar)
+                                .into(binding.ivProfileImage)
+                        } else {
+                            binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
                         }
                     } else {
                         loadBarberProfile(userId)
@@ -102,7 +171,12 @@ class ProfileFragment : Fragment() {
                     binding.tvName.text = getString(R.string.salon_name_placeholder, salonName)
                     binding.tvEmail.text = getString(R.string.email_placeholder, email)
                     if (!profilePictureUrl.isNullOrEmpty()) {
-                        Glide.with(this).load(profilePictureUrl).into(binding.ivProfileImage)
+                        Glide.with(this)
+                            .load(profilePictureUrl)
+                            .placeholder(R.drawable.ic_default_avatar)
+                            .into(binding.ivProfileImage)
+                    } else {
+                        binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
                     }
                 } else {
                     loadHairdresserProfile(userId)
@@ -122,29 +196,25 @@ class ProfileFragment : Fragment() {
                 val salonName = documentSnapshot.getString("salonName")
                 val profilePictureUrl = documentSnapshot.getString("profilePictureUrl")
                 if (username != null && email != null) {
-                    // _binding null olabilir, kontrol etmeniz gerekiyor
-                    _binding?.let {
-                        it.tvUsername.text = getString(R.string.username_placeholder, username)
-                        it.tvName.text = getString(R.string.salon_name_placeholder, salonName)
-                        it.tvEmail.text = getString(R.string.email_placeholder, email)
-                        if (!profilePictureUrl.isNullOrEmpty()) {
-                            Glide.with(this).load(profilePictureUrl).into(it.ivProfileImage)
-                        }
+                    binding.tvUsername.text = getString(R.string.username_placeholder, username)
+                    binding.tvName.text = getString(R.string.salon_name_placeholder, salonName)
+                    binding.tvEmail.text = getString(R.string.email_placeholder, email)
+                    if (!profilePictureUrl.isNullOrEmpty()) {
+                        Glide.with(this)
+                            .load(profilePictureUrl)
+                            .placeholder(R.drawable.ic_default_avatar)
+                            .into(binding.ivProfileImage)
+                    } else {
+                        binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
                     }
                 } else {
-                    // _binding null olabilir, kontrol etmeniz gerekiyor
-                    _binding?.let {
-                        it.tvUsername.text = "Profile not available"
-                        it.tvEmail.text = "Email not available"
-                    }
+                    binding.tvUsername.text = "Profile not available"
+                    binding.tvEmail.text = "Email not available"
                 }
             }
             .addOnFailureListener {
-                // _binding null olabilir, kontrol etmeniz gerekiyor
-                _binding?.let {
-                    it.tvUsername.text = "Profile not available"
-                    it.tvEmail.text = "Email not available"
-                }
+                binding.tvUsername.text = "Profile not available"
+                binding.tvEmail.text = "Email not available"
                 Toast.makeText(context, "Failed to load any profile: ${it.message}", Toast.LENGTH_LONG).show()
             }
     }
@@ -290,7 +360,12 @@ class ProfileFragment : Fragment() {
         binding.tvName.text = getString(R.string.name_placeholder, "${user.firstName} ${user.lastName}")
         binding.tvEmail.text = getString(R.string.email_placeholder, user.email)
         if (!user.profilePictureUrl.isNullOrEmpty()) {
-            Glide.with(this).load(user.profilePictureUrl).into(binding.ivProfileImage)
+            Glide.with(this)
+                .load(user.profilePictureUrl)
+                .placeholder(R.drawable.ic_default_avatar)
+                .into(binding.ivProfileImage)
+        } else {
+            binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
         }
     }
 
@@ -299,7 +374,12 @@ class ProfileFragment : Fragment() {
         binding.tvName.text = getString(R.string.salon_name_placeholder, barber.salonName)
         binding.tvEmail.text = getString(R.string.email_placeholder, barber.email)
         if (!barber.profilePictureUrl.isNullOrEmpty()) {
-            Glide.with(this).load(barber.profilePictureUrl).into(binding.ivProfileImage)
+            Glide.with(this)
+                .load(barber.profilePictureUrl)
+                .placeholder(R.drawable.ic_default_avatar)
+                .into(binding.ivProfileImage)
+        } else {
+            binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
         }
     }
 
@@ -308,7 +388,12 @@ class ProfileFragment : Fragment() {
         binding.tvName.text = getString(R.string.salon_name_placeholder, hairdresser.salonName)
         binding.tvEmail.text = getString(R.string.email_placeholder, hairdresser.email)
         if (!hairdresser.profilePictureUrl.isNullOrEmpty()) {
-            Glide.with(this).load(hairdresser.profilePictureUrl).into(binding.ivProfileImage)
+            Glide.with(this)
+                .load(hairdresser.profilePictureUrl)
+                .placeholder(R.drawable.ic_default_avatar)
+                .into(binding.ivProfileImage)
+        } else {
+            binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
         }
     }
 

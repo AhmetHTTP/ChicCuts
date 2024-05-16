@@ -56,12 +56,15 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation ("com.google.firebase:firebase-firestore:24.0.2")
+
 
     // Lifecycle components
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
     // Glide for image loading
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation(libs.firebase.storage.ktx)
     kapt("com.github.bumptech.glide:compiler:4.12.0")
 
     // Testing

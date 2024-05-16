@@ -60,14 +60,14 @@ object FirestoreUtil {
                 if (appointment.barberId != null) {
                     val barber = db.collection("barbers").document(appointment.barberId!!).get().await().toObject(Barber::class.java)
                     if (barber != null) {
-                        appointment.salonName = barber.salonName  // "name" yerine "salonName" kullanıyoruz
+                        appointment.salonName = barber.salonName
                         appointment.rating = barber.rating
                         appointment.profilePictureUrl = barber.profilePictureUrl
                     }
                 } else if (appointment.hairdresserId != null) {
                     val hairdresser = db.collection("hairdressers").document(appointment.hairdresserId!!).get().await().toObject(Hairdresser::class.java)
                     if (hairdresser != null) {
-                        appointment.salonName = hairdresser.salonName  // "name" yerine "salonName" kullanıyoruz
+                        appointment.salonName = hairdresser.salonName
                         appointment.rating = hairdresser.rating
                         appointment.profilePictureUrl = hairdresser.profilePictureUrl
                     }
@@ -133,7 +133,6 @@ object FirestoreUtil {
         }
     }
 
-
     fun getBarbersByLocation(location: String, onComplete: (List<Barber>) -> Unit) {
         db.collection("barbers").whereEqualTo("location", location).get()
             .addOnSuccessListener { documents ->
@@ -175,6 +174,32 @@ object FirestoreUtil {
             }
             .addOnFailureListener {
                 onComplete(emptyList())
+            }
+    }
+
+    // Yeni fonksiyon: Profil fotoğrafı URL'sini Firestore'a kaydet
+    fun updateProfilePictureUrl(userId: String, url: String, onComplete: (Boolean, String) -> Unit) {
+        val userRef = db.collection("users").document(userId)
+        userRef.update("profilePictureUrl", url)
+            .addOnSuccessListener {
+                onComplete(true, "Profile picture URL updated successfully for user")
+            }
+            .addOnFailureListener {
+                val barberRef = db.collection("barbers").document(userId)
+                barberRef.update("profilePictureUrl", url)
+                    .addOnSuccessListener {
+                        onComplete(true, "Profile picture URL updated successfully for barber")
+                    }
+                    .addOnFailureListener {
+                        val hairdresserRef = db.collection("hairdressers").document(userId)
+                        hairdresserRef.update("profilePictureUrl", url)
+                            .addOnSuccessListener {
+                                onComplete(true, "Profile picture URL updated successfully for hairdresser")
+                            }
+                            .addOnFailureListener { e ->
+                                onComplete(false, e.localizedMessage ?: "Error updating profile picture URL")
+                            }
+                    }
             }
     }
 }
