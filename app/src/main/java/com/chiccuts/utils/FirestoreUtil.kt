@@ -116,21 +116,23 @@ object FirestoreUtil {
                     val appointment = document.toObject(Appointment::class.java)
                     appointments.add(appointment)
                 }
+                onComplete(appointments)
             }
         } else {
-            collectionRef.whereEqualTo("userId", userId).get()
+            collectionRef.whereEqualTo("userId", userId).get().addOnSuccessListener { documents ->
+                documents.forEach { document ->
+                    val appointment = document.toObject(Appointment::class.java)
+                    appointments.add(appointment)
+                }
+                onComplete(appointments)
+            }
         }
 
-        task.addOnSuccessListener { documents ->
-            documents.forEach { document ->
-                val appointment = document.toObject(Appointment::class.java)
-                appointments.add(appointment)
-            }
-            onComplete(appointments)
-        }.addOnFailureListener { e ->
+        task.addOnFailureListener { e ->
             onComplete(emptyList())
         }
     }
+
 
     fun getBarbersByLocation(location: String, onComplete: (List<Barber>) -> Unit) {
         db.collection("barbers").whereEqualTo("location", location).get()
