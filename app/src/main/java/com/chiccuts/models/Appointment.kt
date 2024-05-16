@@ -12,7 +12,8 @@ data class Appointment(
     val location: String = "",
     var salonName: String = "",  // var olarak değiştirildi
     var rating: Double = 0.0,    // var olarak değiştirildi
-    var profilePictureUrl: String? = null,  // var olarak değiştirildi
+    var userProfilePictureUrl: String? = null,  // var olarak değiştirildi
+    var businessProfilePictureUrl: String? = null,  // var olarak değiştirildi
     var userUsername: String = "",  // Yeni alan
     var userFirstName: String = "",  // Yeni alan
     var userLastName: String = ""  // Yeni alan

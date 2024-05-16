@@ -104,10 +104,10 @@ class ProfileFragment : Fragment() {
                     }
                 }
                 .addOnFailureListener {
-                    Toast.makeText(context, "Upload failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                    showToast("Upload failed: ${it.message}")
                 }
         } else {
-            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
+            showToast("User not authenticated")
         }
     }
 
@@ -116,12 +116,20 @@ class ProfileFragment : Fragment() {
 
         FirestoreUtil.updateProfilePictureUrl(userId, downloadUrl) { success, message ->
             if (success) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                showToast(message)
                 // Yeni fotoğrafı hemen güncelle
-                Glide.with(this).load(downloadUrl).placeholder(R.drawable.ic_default_avatar).into(binding.ivProfileImage)
+                if (isAdded && !isDetached) {
+                    Glide.with(this).load(downloadUrl).placeholder(R.drawable.ic_default_avatar).into(binding.ivProfileImage)
+                }
             } else {
-                Toast.makeText(context, "Error updating profile picture: $message", Toast.LENGTH_SHORT).show()
+                showToast("Error updating profile picture: $message")
             }
+        }
+    }
+
+    private fun showToast(message: String) {
+        context?.let {
+            Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -215,7 +223,7 @@ class ProfileFragment : Fragment() {
             .addOnFailureListener {
                 binding.tvUsername.text = "Profile not available"
                 binding.tvEmail.text = "Email not available"
-                Toast.makeText(context, "Failed to load any profile: ${it.message}", Toast.LENGTH_LONG).show()
+                showToast("Failed to load any profile: ${it.message}")
             }
     }
 
@@ -270,7 +278,7 @@ class ProfileFragment : Fragment() {
                 val updatedUser = user.copy(
                     firstName = etFirstName.text.toString(),
                     lastName = etLastName.text.toString(),
-                    email = etEmail.text.toString()
+                    email = etEmail.toString()
                 )
                 saveUserProfile(updatedUser)
             }
@@ -292,7 +300,7 @@ class ProfileFragment : Fragment() {
             .setPositiveButton(getString(R.string.save)) { _, _ ->
                 val updatedBarber = barber.copy(
                     salonName = etSalonName.text.toString(),
-                    email = etEmail.text.toString()
+                    email = etEmail.toString()
                 )
                 saveBarberProfile(updatedBarber)
             }
@@ -314,7 +322,7 @@ class ProfileFragment : Fragment() {
             .setPositiveButton(getString(R.string.save)) { _, _ ->
                 val updatedHairdresser = hairdresser.copy(
                     salonName = etSalonName.text.toString(),
-                    email = etEmail.text.toString()
+                    email = etEmail.toString()
                 )
                 saveHairdresserProfile(updatedHairdresser)
             }
@@ -326,10 +334,10 @@ class ProfileFragment : Fragment() {
         firestore.collection("users").document(user.userId).set(user)
             .addOnSuccessListener {
                 displayUserProfile(user)
-                Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                showToast("Profile updated successfully")
             }
             .addOnFailureListener {
-                Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                showToast("Failed to update profile")
             }
     }
 
@@ -337,10 +345,10 @@ class ProfileFragment : Fragment() {
         firestore.collection("barbers").document(barber.barberId).set(barber)
             .addOnSuccessListener {
                 displayBarberProfile(barber)
-                Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                showToast("Profile updated successfully")
             }
             .addOnFailureListener {
-                Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                showToast("Failed to update profile")
             }
     }
 
@@ -348,10 +356,10 @@ class ProfileFragment : Fragment() {
         firestore.collection("hairdressers").document(hairdresser.hairdresserId).set(hairdresser)
             .addOnSuccessListener {
                 displayHairdresserProfile(hairdresser)
-                Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                showToast("Profile updated successfully")
             }
             .addOnFailureListener {
-                Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                showToast("Failed to update profile")
             }
     }
 
@@ -374,10 +382,12 @@ class ProfileFragment : Fragment() {
         binding.tvName.text = getString(R.string.salon_name_placeholder, barber.salonName)
         binding.tvEmail.text = getString(R.string.email_placeholder, barber.email)
         if (!barber.profilePictureUrl.isNullOrEmpty()) {
-            Glide.with(this)
-                .load(barber.profilePictureUrl)
-                .placeholder(R.drawable.ic_default_avatar)
-                .into(binding.ivProfileImage)
+            if (isAdded && !isDetached) {
+                Glide.with(this)
+                    .load(barber.profilePictureUrl)
+                    .placeholder(R.drawable.ic_default_avatar)
+                    .into(binding.ivProfileImage)
+            }
         } else {
             binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
         }
@@ -388,10 +398,12 @@ class ProfileFragment : Fragment() {
         binding.tvName.text = getString(R.string.salon_name_placeholder, hairdresser.salonName)
         binding.tvEmail.text = getString(R.string.email_placeholder, hairdresser.email)
         if (!hairdresser.profilePictureUrl.isNullOrEmpty()) {
-            Glide.with(this)
-                .load(hairdresser.profilePictureUrl)
-                .placeholder(R.drawable.ic_default_avatar)
-                .into(binding.ivProfileImage)
+            if (isAdded && !isDetached) {
+                Glide.with(this)
+                    .load(hairdresser.profilePictureUrl)
+                    .placeholder(R.drawable.ic_default_avatar)
+                    .into(binding.ivProfileImage)
+            }
         } else {
             binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
         }

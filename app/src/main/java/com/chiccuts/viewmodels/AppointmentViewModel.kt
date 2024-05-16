@@ -16,9 +16,9 @@ class AppointmentViewModel : ViewModel() {
     private val _appointmentStatus = MutableLiveData<String>()
     val appointmentStatus: LiveData<String> = _appointmentStatus
 
-    fun fetchAppointments(userId: String, isBusinessUser: Boolean) {
+    fun fetchAppointments(userId: String, isBusinessOwner: Boolean) {
         viewModelScope.launch {
-            FirestoreUtil.getAppointments(userId, isBusinessUser) { appointments ->
+            FirestoreUtil.getAppointments(userId, isBusinessOwner) { appointments ->
                 _appointments.postValue(appointments)
             }
         }
@@ -29,19 +29,8 @@ class AppointmentViewModel : ViewModel() {
             FirestoreUtil.addAppointment(appointment) { success, message ->
                 _appointmentStatus.postValue(message)
                 if (success) {
-                    fetchAppointments(appointment.userId, false)
+                    fetchAppointments(appointment.userId, false) // Update appointment list
                 }
-            }
-        }
-    }
-
-    fun cancelAppointment(appointmentId: String) {
-        viewModelScope.launch {
-            FirestoreUtil.cancelAppointment(appointmentId) { success, message ->
-                if (success) {
-                    _appointments.value = _appointments.value?.filter { it.appointmentId != appointmentId }
-                }
-                _appointmentStatus.postValue(message)
             }
         }
     }

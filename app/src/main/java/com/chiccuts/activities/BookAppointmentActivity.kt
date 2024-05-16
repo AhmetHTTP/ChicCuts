@@ -52,8 +52,8 @@ class BookAppointmentActivity : AppCompatActivity() {
     private fun prefillAppointmentDetails() {
         val barberId = intent.getStringExtra("BARBER_ID")
         val hairdresserId = intent.getStringExtra("HAIRDRESSER_ID")
-        val salonName = intent.getStringExtra("SALON_NAME")  // Bu satırı ekleyin
-        binding.tvSalonName.text = salonName  // Bu satırı ekleyin
+        val salonName = intent.getStringExtra("SALON_NAME")
+        binding.tvSalonName.text = salonName
     }
 
     private fun openDatePicker() {
@@ -87,7 +87,7 @@ class BookAppointmentActivity : AppCompatActivity() {
         val userId = auth.currentUser?.uid ?: return
         val barberId = intent.getStringExtra("BARBER_ID")
         val hairdresserId = intent.getStringExtra("HAIRDRESSER_ID")
-        val salonName = intent.getStringExtra("SALON_NAME") ?: ""  // Bu satırı ekleyin
+        val salonName = intent.getStringExtra("SALON_NAME") ?: ""
         val serviceType = "Haircut"
         val location = "Default Location"
 
@@ -98,7 +98,7 @@ class BookAppointmentActivity : AppCompatActivity() {
             serviceType = serviceType,
             appointmentTime = date,
             location = location,
-            salonName = salonName  // Bu satırı ekleyin
+            salonName = salonName
         )
 
         appointmentViewModel.addAppointment(appointment)
@@ -117,12 +117,10 @@ class BookAppointmentActivity : AppCompatActivity() {
     }
 
     private fun validateInputs(): Boolean {
-        // Validate date and time
         if (selectedDate == null) {
             showToast("Please select a date and time for the appointment")
             return false
         }
-        // Additional validation for service type and location can be added here
         return true
     }
 

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.chiccuts.R
 import com.chiccuts.databinding.ItemAppointmentBinding
 import com.chiccuts.databinding.ItemAppointmentBusinessBinding
 import com.chiccuts.models.Appointment
@@ -55,10 +56,13 @@ class AppointmentAdapter(
             binding.tvSalonName.text = appointment.salonName
             binding.tvRating.text = "Rating: ${appointment.rating}"
 
-            if (!appointment.profilePictureUrl.isNullOrEmpty()) {
+            val profileUrl = appointment.businessProfilePictureUrl
+            if (!profileUrl.isNullOrEmpty()) {
                 Glide.with(binding.ivProfileImage.context)
-                    .load(appointment.profilePictureUrl)
+                    .load(profileUrl)
                     .into(binding.ivProfileImage)
+            } else {
+                binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
             }
 
             binding.btnCancelAppointment.setOnClickListener {
@@ -87,10 +91,13 @@ class AppointmentAdapter(
             binding.tvLocation.text = appointment.location
             binding.tvUserName.text = "${appointment.userFirstName} ${appointment.userLastName}" // Tek TextView içinde
 
-            if (!appointment.profilePictureUrl.isNullOrEmpty()) {
+            val profileUrl = appointment.userProfilePictureUrl
+            if (!profileUrl.isNullOrEmpty()) {
                 Glide.with(binding.ivProfileImage.context)
-                    .load(appointment.profilePictureUrl)
+                    .load(profileUrl)
                     .into(binding.ivProfileImage)
+            } else {
+                binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
             }
 
             binding.btnCancelAppointment.setOnClickListener {
@@ -108,8 +115,6 @@ class AppointmentAdapter(
             }
         }
     }
-
-
 
     fun removeAppointment(appointmentId: String) {
         val currentList = currentList.toMutableList()

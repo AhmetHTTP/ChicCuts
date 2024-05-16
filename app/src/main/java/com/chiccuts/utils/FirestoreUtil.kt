@@ -56,20 +56,21 @@ object FirestoreUtil {
                 appointment.userUsername = user.username
                 appointment.userFirstName = user.firstName
                 appointment.userLastName = user.lastName
+                appointment.userProfilePictureUrl = user.profilePictureUrl  // Save user's profile picture URL
 
                 if (appointment.barberId != null) {
                     val barber = db.collection("barbers").document(appointment.barberId!!).get().await().toObject(Barber::class.java)
                     if (barber != null) {
                         appointment.salonName = barber.salonName
                         appointment.rating = barber.rating
-                        appointment.profilePictureUrl = barber.profilePictureUrl
+                        appointment.businessProfilePictureUrl = barber.profilePictureUrl  // Save barber's profile picture URL
                     }
                 } else if (appointment.hairdresserId != null) {
                     val hairdresser = db.collection("hairdressers").document(appointment.hairdresserId!!).get().await().toObject(Hairdresser::class.java)
                     if (hairdresser != null) {
                         appointment.salonName = hairdresser.salonName
                         appointment.rating = hairdresser.rating
-                        appointment.profilePictureUrl = hairdresser.profilePictureUrl
+                        appointment.businessProfilePictureUrl = hairdresser.profilePictureUrl  // Save hairdresser's profile picture URL
                     }
                 }
 
