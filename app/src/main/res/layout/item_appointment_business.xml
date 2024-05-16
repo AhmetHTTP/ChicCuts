@@ -16,10 +16,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tvSalonName"
+        android:id="@+id/tvUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Salon Name"
+        android:text="User Name"
         android:textSize="16sp"
         android:textColor="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +33,7 @@
         android:text="Appointment Time"
         android:textSize="14sp"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintTop_toBottomOf="@id/tvSalonName"
+        app:layout_constraintTop_toBottomOf="@id/tvUserName"
         app:layout_constraintStart_toEndOf="@id/ivProfileImage"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -59,23 +59,12 @@
         app:layout_constraintStart_toEndOf="@id/ivProfileImage"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/tvRating"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Rating"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurface"
-        app:layout_constraintTop_toBottomOf="@id/tvServiceType"
-        app:layout_constraintStart_toEndOf="@id/ivProfileImage"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <Button
         android:id="@+id/btnCancelAppointment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
-        app:layout_constraintTop_toBottomOf="@id/tvRating"
+        app:layout_constraintTop_toBottomOf="@id/tvServiceType"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />

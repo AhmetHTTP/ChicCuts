@@ -85,8 +85,7 @@ class AppointmentAdapter(
             binding.tvAppointmentTime.text = appointment.appointmentTime.toString()
             binding.tvServiceType.text = appointment.serviceType
             binding.tvLocation.text = appointment.location
-            binding.tvSalonName.text = appointment.salonName  // Sadece salonName bilgisi gösteriliyor
-            binding.tvRating.text = "Rating: ${appointment.rating}"
+            binding.tvUserName.text = "${appointment.userFirstName} ${appointment.userLastName}" // Tek TextView içinde
 
             if (!appointment.profilePictureUrl.isNullOrEmpty()) {
                 Glide.with(binding.ivProfileImage.context)
@@ -109,6 +108,8 @@ class AppointmentAdapter(
             }
         }
     }
+
+
 
     fun removeAppointment(appointmentId: String) {
         val currentList = currentList.toMutableList()
