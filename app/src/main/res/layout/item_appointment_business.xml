@@ -59,14 +59,25 @@
         app:layout_constraintStart_toEndOf="@id/ivProfileImage"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/btnCancelAppointment"
-        android:layout_width="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnShowLocation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="Show on Map"
+        android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/tvServiceType"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCancelAppointment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/btnShowLocation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

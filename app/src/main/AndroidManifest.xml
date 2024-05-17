@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.chiccuts">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -44,13 +46,15 @@
 
         <!-- BookAppointmentActivity needs to specify exported explicitly if targeting API 31 or higher -->
         <activity android:name=".activities.BookAppointmentActivity"
-            android:exported="true" /> <!-- Check if you need this to be exported or not based on your app's navigation requirements -->
+            android:exported="true" />
+
+        <!-- SelectLocationActivity needs to be added -->
+        <activity android:name=".activities.SelectLocationActivity"
+            android:exported="true" />
 
         <!-- Conditional attribute for API 33 and higher -->
         <meta-data
-            android:name="android:enableOnBackInvokedCallback"
-            android:value="true"
-            tools:targetApi="33" />
-
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDFi1hHklj5XblDwOD5h0gWRS9xf0mCU0M" />
     </application>
 </manifest>

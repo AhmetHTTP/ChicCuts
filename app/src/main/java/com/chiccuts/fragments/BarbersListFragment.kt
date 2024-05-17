@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chiccuts.adapters.BarberAdapter
@@ -31,11 +32,11 @@ class BarbersListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        loadBarbers()
+        setupCitySpinner()
     }
 
     private fun setupRecyclerView() {
-        barberAdapter = BarberAdapter { barber ->
+        barberAdapter = BarberAdapter(requireContext()) { barber ->
             openBookAppointment(barber)
         }
         binding.rvBarbersList.apply {
@@ -44,16 +45,35 @@ class BarbersListFragment : Fragment() {
         }
     }
 
-    private fun loadBarbers() {
+    private fun setupCitySpinner() {
+        binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedCity = parent?.getItemAtPosition(position).toString()
+                loadBarbers(selectedCity)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
+    }
+
+    private fun loadBarbers(city: String) {
         binding.progressBar.visibility = View.VISIBLE
-        firestoreInstance.collection("barbers").get()
+        firestoreInstance.collection("barbers")
+            .whereEqualTo("city", city)
+            .get()
             .addOnSuccessListener { documents ->
                 val barbers = documents.toObjects(Barber::class.java)
                 barberAdapter.submitList(barbers)
                 binding.progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
-                // Handle the error appropriately
                 exception.printStackTrace()
                 Toast.makeText(context, "Failed to load barbers: ${exception.message}", Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
@@ -63,7 +83,7 @@ class BarbersListFragment : Fragment() {
     private fun openBookAppointment(barber: Barber) {
         val intent = Intent(context, BookAppointmentActivity::class.java).apply {
             putExtra("BARBER_ID", barber.barberId)
-            putExtra("SALON_NAME", barber.salonName)  // "name" yerine "salonName" kullanıyoruz
+            putExtra("SALON_NAME", barber.salonName)
         }
         startActivity(intent)
     }

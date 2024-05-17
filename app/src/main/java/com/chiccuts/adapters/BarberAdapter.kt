@@ -1,5 +1,8 @@
 package com.chiccuts.adapters
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +13,7 @@ import com.chiccuts.R
 import com.chiccuts.databinding.ItemBarberBinding
 import com.chiccuts.models.Barber
 
-class BarberAdapter(private val onClick: (Barber) -> Unit) : ListAdapter<Barber, BarberAdapter.BarberViewHolder>(BarberDiffCallback()) {
+class BarberAdapter(private val context: Context, private val onClick: (Barber) -> Unit) : ListAdapter<Barber, BarberAdapter.BarberViewHolder>(BarberDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarberViewHolder {
         val binding = ItemBarberBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,9 +25,9 @@ class BarberAdapter(private val onClick: (Barber) -> Unit) : ListAdapter<Barber,
         holder.bind(barber)
     }
 
-    class BarberViewHolder(private val binding: ItemBarberBinding, private val onClick: (Barber) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+    inner class BarberViewHolder(private val binding: ItemBarberBinding, private val onClick: (Barber) -> Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bind(barber: Barber) {
-            binding.tvBarberName.text = barber.salonName  // "name" yerine "salonName" kullanıyoruz
+            binding.tvBarberName.text = barber.salonName
             binding.tvBarberServices.text = barber.serviceTypes.joinToString(", ")
             binding.tvBarberRating.text = "Rating: ${barber.rating}"
 
@@ -38,6 +41,14 @@ class BarberAdapter(private val onClick: (Barber) -> Unit) : ListAdapter<Barber,
 
             binding.root.setOnClickListener {
                 onClick(barber) // Trigger click listener when item is clicked
+            }
+
+            binding.btnShowOnMap.setOnClickListener {
+                val location = barber.location
+                val gmmIntentUri = Uri.parse("geo:0,0?q=$location")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                context.startActivity(mapIntent)
             }
         }
     }

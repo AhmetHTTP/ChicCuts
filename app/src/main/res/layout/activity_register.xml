@@ -16,7 +16,7 @@
         android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Title -->
     <TextView
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/ivLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <!-- User Registration -->
     <com.google.android.material.button.MaterialButton
@@ -42,9 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"/>
+        android:layout_marginTop="24dp" />
 
     <!-- Business Registration -->
     <com.google.android.material.button.MaterialButton
@@ -54,11 +52,9 @@
         android:text="Register as Business"
         android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/btnRegisterUser"
-        app:layout_constraintStart_toStartOf="@id/btnRegisterUser"
-        app:layout_constraintEnd_toEndOf="@id/btnRegisterUser"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
     <!-- Back to Login -->
     <TextView
@@ -69,9 +65,9 @@
         android:textColor="?attr/colorPrimary"
         android:fontFamily="sans-serif"
         app:layout_constraintTop_toBottomOf="@id/btnRegisterBusiness"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
     <!-- Back Button -->
     <com.google.android.material.button.MaterialButton
@@ -81,9 +77,7 @@
         android:text="Back to Login"
         android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/tvGoToLogin"
-        app:layout_constraintStart_toStartOf="@id/tvGoToLogin"
-        app:layout_constraintEnd_toEndOf="@id/tvGoToLogin"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,8 +15,8 @@
         android:src="@drawable/ic_launcher_foreground"
         android:contentDescription="@string/barber_profile_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- Barber Name -->
     <TextView
@@ -31,7 +31,6 @@
         app:layout_constraintStart_toEndOf="@id/ivBarberProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintBottom_toTopOf="@id/tvBarberServices"
         android:layout_marginBottom="4dp"/>
 
     <!-- Barber Services -->
@@ -46,8 +45,7 @@
         app:layout_constraintStart_toEndOf="@id/ivBarberProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvBarberName"
-        app:layout_constraintBottom_toTopOf="@id/tvBarberLocation"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="4dp"/>
 
     <!-- Barber Location -->
     <TextView
@@ -61,8 +59,7 @@
         app:layout_constraintStart_toEndOf="@id/ivBarberProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvBarberServices"
-        app:layout_constraintBottom_toTopOf="@id/tvBarberRating"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="4dp"/>
 
     <!-- Barber Rating -->
     <TextView
@@ -73,10 +70,18 @@
         android:textSize="14sp"
         android:textColor="?attr/colorSecondary"
         android:fontFamily="sans-serif"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivBarberProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvBarberLocation"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="4dp"/>
 
+    <!-- Show on Map Button -->
+    <Button
+        android:id="@+id/btnShowOnMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show on Map"
+        app:layout_constraintTop_toBottomOf="@id/tvBarberRating"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

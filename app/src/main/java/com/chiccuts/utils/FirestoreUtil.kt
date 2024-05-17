@@ -58,12 +58,15 @@ object FirestoreUtil {
                 appointment.userLastName = user.lastName
                 appointment.userProfilePictureUrl = user.profilePictureUrl  // Save user's profile picture URL
 
+                var location: String? = "Default Location"
+
                 if (appointment.barberId != null) {
                     val barber = db.collection("barbers").document(appointment.barberId!!).get().await().toObject(Barber::class.java)
                     if (barber != null) {
                         appointment.salonName = barber.salonName
                         appointment.rating = barber.rating
                         appointment.businessProfilePictureUrl = barber.profilePictureUrl  // Save barber's profile picture URL
+                        location = barber.location  // Add location from barber
                     }
                 } else if (appointment.hairdresserId != null) {
                     val hairdresser = db.collection("hairdressers").document(appointment.hairdresserId!!).get().await().toObject(Hairdresser::class.java)
@@ -71,8 +74,11 @@ object FirestoreUtil {
                         appointment.salonName = hairdresser.salonName
                         appointment.rating = hairdresser.rating
                         appointment.businessProfilePictureUrl = hairdresser.profilePictureUrl  // Save hairdresser's profile picture URL
+                        location = hairdresser.location  // Add location from hairdresser
                     }
                 }
+
+                appointment.location = location ?: "Default Location"
 
                 appointmentRef.set(appointment).await()
                 onComplete(true, "Appointment scheduled successfully")

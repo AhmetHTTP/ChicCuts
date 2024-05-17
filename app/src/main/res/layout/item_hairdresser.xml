@@ -15,8 +15,8 @@
         android:src="@drawable/ic_launcher_foreground"
         android:contentDescription="@string/hairdresser_profile_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- Hairdresser Name -->
     <TextView
@@ -31,7 +31,6 @@
         app:layout_constraintStart_toEndOf="@id/ivHairdresserProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintBottom_toTopOf="@id/tvHairdresserServices"
         android:layout_marginBottom="4dp"/>
 
     <!-- Hairdresser Services -->
@@ -46,8 +45,7 @@
         app:layout_constraintStart_toEndOf="@id/ivHairdresserProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvHairdresserName"
-        app:layout_constraintBottom_toTopOf="@id/tvHairdresserLocation"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="4dp"/>
 
     <!-- Hairdresser Location -->
     <TextView
@@ -61,8 +59,7 @@
         app:layout_constraintStart_toEndOf="@id/ivHairdresserProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvHairdresserServices"
-        app:layout_constraintBottom_toTopOf="@id/tvHairdresserRating"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="4dp"/>
 
     <!-- Hairdresser Rating -->
     <TextView
@@ -73,10 +70,18 @@
         android:textSize="14sp"
         android:textColor="?attr/colorSecondary"
         android:fontFamily="sans-serif"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivHairdresserProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvHairdresserLocation"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="4dp"/>
 
+    <!-- Show on Map Button -->
+    <Button
+        android:id="@+id/btnShowOnMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show on Map"
+        app:layout_constraintTop_toBottomOf="@id/tvHairdresserRating"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chiccuts.activities.BookAppointmentActivity
@@ -31,11 +32,11 @@ class HairdressersListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        loadHairdressers()
+        setupCitySpinner()
     }
 
     private fun setupRecyclerView() {
-        hairdresserAdapter = HairdresserAdapter { hairdresser ->
+        hairdresserAdapter = HairdresserAdapter(requireContext()) { hairdresser ->
             openBookAppointment(hairdresser)
         }
         binding.rvHairdressersList.apply {
@@ -44,16 +45,35 @@ class HairdressersListFragment : Fragment() {
         }
     }
 
-    private fun loadHairdressers() {
+    private fun setupCitySpinner() {
+        binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedCity = parent?.getItemAtPosition(position).toString()
+                loadHairdressers(selectedCity)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
+    }
+
+    private fun loadHairdressers(city: String) {
         binding.progressBar.visibility = View.VISIBLE
-        firestoreInstance.collection("hairdressers").get()
+        firestoreInstance.collection("hairdressers")
+            .whereEqualTo("city", city)
+            .get()
             .addOnSuccessListener { documents ->
                 val hairdressers = documents.toObjects(Hairdresser::class.java)
                 hairdresserAdapter.submitList(hairdressers)
                 binding.progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
-                // Handle the error appropriately
                 exception.printStackTrace()
                 Toast.makeText(context, "Failed to load hairdressers: ${exception.message}", Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
@@ -63,7 +83,7 @@ class HairdressersListFragment : Fragment() {
     private fun openBookAppointment(hairdresser: Hairdresser) {
         val intent = Intent(context, BookAppointmentActivity::class.java).apply {
             putExtra("HAIRDRESSER_ID", hairdresser.hairdresserId)
-            putExtra("HAIRDRESSER_NAME", hairdresser.salonName)  // Düzenlendi: hairdresser.name yerine hairdresser.salonName kullanılıyor
+            putExtra("HAIRDRESSER_NAME", hairdresser.salonName)
         }
         startActivity(intent)
     }

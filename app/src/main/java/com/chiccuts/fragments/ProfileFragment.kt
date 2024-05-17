@@ -179,10 +179,12 @@ class ProfileFragment : Fragment() {
                     binding.tvName.text = getString(R.string.salon_name_placeholder, salonName)
                     binding.tvEmail.text = getString(R.string.email_placeholder, email)
                     if (!profilePictureUrl.isNullOrEmpty()) {
-                        Glide.with(this)
-                            .load(profilePictureUrl)
-                            .placeholder(R.drawable.ic_default_avatar)
-                            .into(binding.ivProfileImage)
+                        if (isAdded && !isDetached) {
+                            Glide.with(this)
+                                .load(profilePictureUrl)
+                                .placeholder(R.drawable.ic_default_avatar)
+                                .into(binding.ivProfileImage)
+                        }
                     } else {
                         binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
                     }
@@ -208,10 +210,12 @@ class ProfileFragment : Fragment() {
                     binding.tvName.text = getString(R.string.salon_name_placeholder, salonName)
                     binding.tvEmail.text = getString(R.string.email_placeholder, email)
                     if (!profilePictureUrl.isNullOrEmpty()) {
-                        Glide.with(this)
-                            .load(profilePictureUrl)
-                            .placeholder(R.drawable.ic_default_avatar)
-                            .into(binding.ivProfileImage)
+                        if (isAdded && !isDetached) {
+                            Glide.with(this)
+                                .load(profilePictureUrl)
+                                .placeholder(R.drawable.ic_default_avatar)
+                                .into(binding.ivProfileImage)
+                        }
                     } else {
                         binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
                     }
@@ -278,7 +282,7 @@ class ProfileFragment : Fragment() {
                 val updatedUser = user.copy(
                     firstName = etFirstName.text.toString(),
                     lastName = etLastName.text.toString(),
-                    email = etEmail.toString()
+                    email = etEmail.text.toString()
                 )
                 saveUserProfile(updatedUser)
             }

@@ -9,12 +9,12 @@ data class Appointment(
     val hairdresserId: String? = null,
     val serviceType: String = "",
     val appointmentTime: Date = Date(),
-    val location: String = "",
-    var salonName: String = "",  // var olarak değiştirildi
-    var rating: Double = 0.0,    // var olarak değiştirildi
-    var userProfilePictureUrl: String? = null,  // var olarak değiştirildi
-    var businessProfilePictureUrl: String? = null,  // var olarak değiştirildi
-    var userUsername: String = "",  // Yeni alan
-    var userFirstName: String = "",  // Yeni alan
-    var userLastName: String = ""  // Yeni alan
+    var location: String = "", // Burada val'den var'a değiştirildi
+    var salonName: String = "",
+    var rating: Double = 0.0,
+    var userProfilePictureUrl: String? = null,
+    var businessProfilePictureUrl: String? = null,
+    var userUsername: String = "",
+    var userFirstName: String = "",
+    var userLastName: String = ""
 )

@@ -1,5 +1,7 @@
 package com.chiccuts.adapters
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -65,6 +67,25 @@ class AppointmentAdapter(
                 binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
             }
 
+            binding.btnShowLocation.setOnClickListener {
+                val location = appointment.location
+                if (location != "Default Location" && location.contains(",")) {
+                    val locationParts = location.split(",")
+                    val latitude = locationParts[0].trim()
+                    val longitude = locationParts[1].trim()
+                    val uri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    intent.setPackage("com.google.android.apps.maps")
+                    if (intent.resolveActivity(binding.root.context.packageManager) != null) {
+                        binding.root.context.startActivity(intent)
+                    } else {
+                        // Handle the case where the Maps app is not installed
+                    }
+                } else {
+                    // Handle the case where the location is "Default Location" or incorrect
+                }
+            }
+
             binding.btnCancelAppointment.setOnClickListener {
                 if (appointment.appointmentId.isNotBlank()) {
                     FirestoreUtil.cancelAppointment(appointment.appointmentId) { success, message ->
@@ -89,7 +110,7 @@ class AppointmentAdapter(
             binding.tvAppointmentTime.text = appointment.appointmentTime.toString()
             binding.tvServiceType.text = appointment.serviceType
             binding.tvLocation.text = appointment.location
-            binding.tvUserName.text = "${appointment.userFirstName} ${appointment.userLastName}" // Tek TextView içinde
+            binding.tvUserName.text = "${appointment.userFirstName} ${appointment.userLastName}"
 
             val profileUrl = appointment.userProfilePictureUrl
             if (!profileUrl.isNullOrEmpty()) {
@@ -98,6 +119,25 @@ class AppointmentAdapter(
                     .into(binding.ivProfileImage)
             } else {
                 binding.ivProfileImage.setImageResource(R.drawable.ic_default_avatar)
+            }
+
+            binding.btnShowLocation.setOnClickListener {
+                val location = appointment.location
+                if (location != "Default Location" && location.contains(",")) {
+                    val locationParts = location.split(",")
+                    val latitude = locationParts[0].trim()
+                    val longitude = locationParts[1].trim()
+                    val uri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    intent.setPackage("com.google.android.apps.maps")
+                    if (intent.resolveActivity(binding.root.context.packageManager) != null) {
+                        binding.root.context.startActivity(intent)
+                    } else {
+                        // Handle the case where the Maps app is not installed
+                    }
+                } else {
+                    // Handle the case where the location is "Default Location" or incorrect
+                }
             }
 
             binding.btnCancelAppointment.setOnClickListener {

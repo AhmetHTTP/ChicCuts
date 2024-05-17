@@ -8,6 +8,7 @@ data class Barber(
     val email: String = "",
     val salonName: String = "",
     val location: String = "",
+    val city: String = "",  // Added city field
     val serviceTypes: List<String> = listOf(),
     val rating: Double = 0.0,
     val profilePictureUrl: String? = null,
