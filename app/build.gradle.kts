@@ -70,6 +70,8 @@ dependencies {
     implementation(libs.firebase.storage.ktx)
     implementation(libs.play.services.location)
     kapt("com.github.bumptech.glide:compiler:4.12.0")
+    implementation ("com.github.yalantis:ucrop:2.2.6")
+
 
     // Testing
     testImplementation("junit:junit:4.13.2")

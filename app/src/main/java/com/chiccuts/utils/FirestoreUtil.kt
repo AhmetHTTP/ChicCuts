@@ -2,48 +2,45 @@ package com.chiccuts.utils
 
 import com.chiccuts.models.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.tasks.await
 
 object FirestoreUtil {
 
-    private val db = FirebaseFirestore.getInstance()
-
-    fun addUser(user: User, onComplete: (Boolean, String) -> Unit) {
-        db.collection("users").document(user.userId).set(user)
-            .addOnSuccessListener { onComplete(true, "User added successfully") }
-            .addOnFailureListener { exception ->
-                onComplete(false, exception.localizedMessage ?: "Error adding user")
-            }
-    }
+    val db = FirebaseFirestore.getInstance()
+    private val listeners = mutableMapOf<String, ListenerRegistration>()
 
     fun getUser(userId: String, onComplete: (User?) -> Unit) {
-        db.collection("users").document(userId).get()
-            .addOnSuccessListener { document ->
-                onComplete(document.toObject(User::class.java))
-            }
-            .addOnFailureListener {
+        val listener = db.collection("users").document(userId).addSnapshotListener { document, error ->
+            if (error != null) {
                 onComplete(null)
+            } else {
+                onComplete(document?.toObject(User::class.java))
             }
+        }
+        listeners[userId] = listener
     }
 
     fun getBarber(barberId: String, onComplete: (Barber?) -> Unit) {
-        db.collection("barbers").document(barberId).get()
-            .addOnSuccessListener { document ->
-                onComplete(document.toObject(Barber::class.java))
-            }
-            .addOnFailureListener {
+        val listener = db.collection("barbers").document(barberId).addSnapshotListener { document, error ->
+            if (error != null) {
                 onComplete(null)
+            } else {
+                onComplete(document?.toObject(Barber::class.java))
             }
+        }
+        listeners[barberId] = listener
     }
 
     fun getHairdresser(hairdresserId: String, onComplete: (Hairdresser?) -> Unit) {
-        db.collection("hairdressers").document(hairdresserId).get()
-            .addOnSuccessListener { document ->
-                onComplete(document.toObject(Hairdresser::class.java))
-            }
-            .addOnFailureListener {
+        val listener = db.collection("hairdressers").document(hairdresserId).addSnapshotListener { document, error ->
+            if (error != null) {
                 onComplete(null)
+            } else {
+                onComplete(document?.toObject(Hairdresser::class.java))
             }
+        }
+        listeners[hairdresserId] = listener
     }
 
     suspend fun addAppointment(appointment: Appointment, onComplete: (Boolean, String) -> Unit) {
@@ -56,7 +53,7 @@ object FirestoreUtil {
                 appointment.userUsername = user.username
                 appointment.userFirstName = user.firstName
                 appointment.userLastName = user.lastName
-                appointment.userProfilePictureUrl = user.profilePictureUrl  // Save user's profile picture URL
+                appointment.userProfilePictureUrl = user.profilePictureUrl
 
                 var location: String? = "Default Location"
 
@@ -65,16 +62,16 @@ object FirestoreUtil {
                     if (barber != null) {
                         appointment.salonName = barber.salonName
                         appointment.rating = barber.rating
-                        appointment.businessProfilePictureUrl = barber.profilePictureUrl  // Save barber's profile picture URL
-                        location = barber.location  // Add location from barber
+                        appointment.businessProfilePictureUrl = barber.profilePictureUrl
+                        location = barber.location
                     }
                 } else if (appointment.hairdresserId != null) {
                     val hairdresser = db.collection("hairdressers").document(appointment.hairdresserId!!).get().await().toObject(Hairdresser::class.java)
                     if (hairdresser != null) {
                         appointment.salonName = hairdresser.salonName
                         appointment.rating = hairdresser.rating
-                        appointment.businessProfilePictureUrl = hairdresser.profilePictureUrl  // Save hairdresser's profile picture URL
-                        location = hairdresser.location  // Add location from hairdresser
+                        appointment.businessProfilePictureUrl = hairdresser.profilePictureUrl
+                        location = hairdresser.location
                     }
                 }
 
@@ -106,37 +103,44 @@ object FirestoreUtil {
             }
     }
 
-    fun getAppointments(userId: String, isBusinessOwner: Boolean, onComplete: (List<Appointment>) -> Unit) {
+    fun getAppointments(userId: String, isBusinessOwner: Boolean, onComplete: (List<Appointment>, Exception?) -> Unit) {
         val collectionRef = db.collection("appointments")
         val appointments = mutableListOf<Appointment>()
 
-        val task = if (isBusinessOwner) {
-            collectionRef.whereEqualTo("barberId", userId).get().addOnSuccessListener { documents ->
-                documents.forEach { document ->
-                    val appointment = document.toObject(Appointment::class.java)
-                    appointments.add(appointment)
+        if (isBusinessOwner) {
+            // Berber veya Kuaför için randevuları çek
+            collectionRef.whereEqualTo("barberId", userId).get()
+                .addOnSuccessListener { documents ->
+                    documents.forEach { document ->
+                        val appointment = document.toObject(Appointment::class.java)
+                        appointments.add(appointment)
+                    }
+                    // Kuaför randevuları için devam et
+                }.continueWithTask {
+                    collectionRef.whereEqualTo("hairdresserId", userId).get()
+                }.addOnSuccessListener { documents ->
+                    documents.forEach { document ->
+                        val appointment = document.toObject(Appointment::class.java)
+                        appointment.isRated = document.getBoolean("isRated") ?: false
+                        appointments.add(appointment)
+                    }
+                    onComplete(appointments, null)
+                }.addOnFailureListener { e ->
+                    onComplete(emptyList(), e)
                 }
-            }.continueWithTask {
-                collectionRef.whereEqualTo("hairdresserId", userId).get()
-            }.addOnSuccessListener { documents ->
-                documents.forEach { document ->
-                    val appointment = document.toObject(Appointment::class.java)
-                    appointments.add(appointment)
-                }
-                onComplete(appointments)
-            }
         } else {
-            collectionRef.whereEqualTo("userId", userId).get().addOnSuccessListener { documents ->
-                documents.forEach { document ->
-                    val appointment = document.toObject(Appointment::class.java)
-                    appointments.add(appointment)
+            // Normal kullanıcı için randevuları çek
+            collectionRef.whereEqualTo("userId", userId).get()
+                .addOnSuccessListener { documents ->
+                    documents.forEach { document ->
+                        val appointment = document.toObject(Appointment::class.java)
+                        appointment.isRated = document.getBoolean("isRated") ?: false
+                        appointments.add(appointment)
+                    }
+                    onComplete(appointments, null)
+                }.addOnFailureListener { e ->
+                    onComplete(emptyList(), e)
                 }
-                onComplete(appointments)
-            }
-        }
-
-        task.addOnFailureListener { e ->
-            onComplete(emptyList())
         }
     }
 
@@ -184,7 +188,6 @@ object FirestoreUtil {
             }
     }
 
-    // Yeni fonksiyon: Profil fotoğrafı URL'sini Firestore'a kaydet
     fun updateProfilePictureUrl(userId: String, url: String, onComplete: (Boolean, String) -> Unit) {
         val userRef = db.collection("users").document(userId)
         userRef.update("profilePictureUrl", url)
@@ -208,5 +211,15 @@ object FirestoreUtil {
                             }
                     }
             }
+    }
+
+    fun removeAllListeners() {
+        listeners.forEach { it.value.remove() }
+        listeners.clear()
+    }
+
+    fun removeListenersForUser(userId: String) {
+        listeners[userId]?.remove()
+        listeners.remove(userId)
     }
 }

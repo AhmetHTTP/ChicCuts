@@ -31,6 +31,9 @@
 
     <string name="profile_not_available">Profile not available</string>
     <string name="email_not_available">Email not available</string>
+    <string name="services_description_placeholder">Service Description: %1$s</string>
+    <string name="edit_profile_image">Edit Profile Image</string>
+
 
     <!-- New strings for city selection and address line -->
     <string name="city_prompt">Select your city</string>

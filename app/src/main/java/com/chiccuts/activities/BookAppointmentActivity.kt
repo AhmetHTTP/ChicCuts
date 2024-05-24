@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.chiccuts.R
 import com.chiccuts.databinding.ActivityBookAppointmentBinding
 import com.chiccuts.models.Appointment
 import com.chiccuts.utils.FirestoreUtil
@@ -54,7 +56,38 @@ class BookAppointmentActivity : AppCompatActivity() {
         val hairdresserId = intent.getStringExtra("HAIRDRESSER_ID")
         val salonName = intent.getStringExtra("SALON_NAME")
         binding.tvSalonName.text = salonName
+
+        if (barberId != null) {
+            FirestoreUtil.getBarber(barberId) { barber ->
+                if (barber != null && !isDestroyed) {
+                    binding.ratingBar.rating = barber.rating.toFloat()
+                    binding.tvServiceDescription.text = barber.serviceDescription
+                    loadProfileImage(barber.profilePictureUrl)
+                }
+            }
+        } else if (hairdresserId != null) {
+            FirestoreUtil.getHairdresser(hairdresserId) { hairdresser ->
+                if (hairdresser != null && !isDestroyed) {
+                    binding.ratingBar.rating = hairdresser.rating.toFloat()
+                    binding.tvServiceDescription.text = hairdresser.serviceDescription
+                    loadProfileImage(hairdresser.profilePictureUrl)
+                }
+            }
+        }
     }
+
+
+    private fun loadProfileImage(profilePictureUrl: String?) {
+        if (!profilePictureUrl.isNullOrEmpty()) {
+            if (!isDestroyed) { // Aktivite yok edilmediyse resim yükle
+                Glide.with(this)
+                    .load(profilePictureUrl)
+                    .placeholder(R.drawable.ic_default_avatar)
+                    .into(binding.ivProfileImage)
+            }
+        }
+    }
+
 
     private fun openDatePicker() {
         val calendar = Calendar.getInstance()

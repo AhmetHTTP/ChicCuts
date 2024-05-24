@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chiccuts.R
+import com.chiccuts.activities.BookAppointmentActivity
 import com.chiccuts.databinding.ItemHairdresserBinding
 import com.chiccuts.models.Hairdresser
 
@@ -29,18 +30,23 @@ class HairdresserAdapter(private val context: Context, private val onClick: (Hai
         fun bind(hairdresser: Hairdresser) {
             binding.tvHairdresserName.text = hairdresser.salonName
             binding.tvHairdresserServices.text = hairdresser.serviceTypes.joinToString(", ")
-            binding.tvHairdresserRating.text = "Rating: ${hairdresser.rating}"
+            // Rating ve ratingsCount değerlerini doğru şekilde göster
+            binding.tvHairdresserRating.text = if (hairdresser.ratingsCount != null && hairdresser.ratingsCount!! > 0) {
+                String.format("%.1f (%d ratings)", hairdresser.rating, hairdresser.ratingsCount)
+            } else {
+                "0 (0 ratings)"
+            }
 
-            // Load profile picture using Glide
             if (!hairdresser.profilePictureUrl.isNullOrEmpty()) {
                 Glide.with(binding.ivHairdresserProfile.context)
                     .load(hairdresser.profilePictureUrl)
                     .placeholder(R.drawable.ic_launcher_foreground)
+                    .circleCrop()
                     .into(binding.ivHairdresserProfile)
             }
 
             binding.root.setOnClickListener {
-                onClick(hairdresser) // Trigger click listener when item is clicked
+                onClick(hairdresser)
             }
 
             binding.btnShowOnMap.setOnClickListener {
@@ -51,6 +57,14 @@ class HairdresserAdapter(private val context: Context, private val onClick: (Hai
                 context.startActivity(mapIntent)
             }
         }
+    }
+
+    private fun openBookAppointment(hairdresser: Hairdresser) {
+        val intent = Intent(context, BookAppointmentActivity::class.java).apply {
+            putExtra("HAIRDRESSER_ID", hairdresser.hairdresserId)
+            putExtra("SALON_NAME", hairdresser.salonName)
+        }
+        context.startActivity(intent)
     }
 }
 

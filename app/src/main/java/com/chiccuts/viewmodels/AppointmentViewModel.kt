@@ -17,14 +17,28 @@ class AppointmentViewModel : ViewModel() {
     val appointmentStatus: LiveData<String> = _appointmentStatus
 
     fun fetchAppointments(userId: String, isBusinessOwner: Boolean) {
+        if (userId.isEmpty()) {
+            _appointmentStatus.postValue("User is not authenticated")
+            return
+        }
+
         viewModelScope.launch {
-            FirestoreUtil.getAppointments(userId, isBusinessOwner) { appointments ->
-                _appointments.postValue(appointments)
+            FirestoreUtil.getAppointments(userId, isBusinessOwner) { appointments, error ->
+                if (error != null) {
+                    _appointmentStatus.postValue("Error fetching appointment data: ${error.message}")
+                } else {
+                    _appointments.postValue(appointments)
+                }
             }
         }
     }
 
     fun addAppointment(appointment: Appointment) {
+        if (appointment.userId.isEmpty()) {
+            _appointmentStatus.postValue("User is not authenticated")
+            return
+        }
+
         viewModelScope.launch {
             FirestoreUtil.addAppointment(appointment) { success, message ->
                 _appointmentStatus.postValue(message)
@@ -33,5 +47,10 @@ class AppointmentViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun clearData() {
+        _appointments.postValue(emptyList())
+        _appointmentStatus.postValue("")
     }
 }

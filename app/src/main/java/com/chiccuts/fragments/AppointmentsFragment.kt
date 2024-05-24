@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -36,8 +37,10 @@ class AppointmentsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkUserType { isBusiness ->
             isBusinessUser = isBusiness
-            setupRecyclerView()
-            loadAppointments()
+            if (_binding != null) { // Binding null kontrolü
+                setupRecyclerView()
+                loadAppointments()
+            }
         }
     }
 
@@ -63,6 +66,7 @@ class AppointmentsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
+        if (_binding == null) return // Binding null kontrolü
         appointmentAdapter = AppointmentAdapter(isBusinessUser) { isEmpty ->
             binding.tvNoAppointments.visibility = if (isEmpty) View.VISIBLE else View.GONE
         }
@@ -73,20 +77,37 @@ class AppointmentsFragment : Fragment() {
     }
 
     private fun loadAppointments() {
-        val userId = auth.currentUser?.uid ?: return
-        binding.progressBar.visibility = View.VISIBLE
+        val userId = auth.currentUser?.uid
+        if (userId == null || _binding == null) { // Binding null kontrolü
+            binding?.progressBar?.visibility = View.GONE
+            Toast.makeText(context, "User is not authenticated", Toast.LENGTH_SHORT).show()
+            return
+        }
 
+        binding?.progressBar?.visibility = View.VISIBLE
         appointmentViewModel.fetchAppointments(userId, isBusinessUser)
 
         appointmentViewModel.appointments.observe(viewLifecycleOwner, Observer { appointments ->
-            appointmentAdapter.submitList(appointments)
-            binding.tvNoAppointments.visibility = if (appointments.isEmpty()) View.VISIBLE else View.GONE
-            binding.progressBar.visibility = View.GONE
+            if (_binding != null) { // Binding null kontrolü
+                appointmentAdapter.submitList(appointments)
+                binding.tvNoAppointments.visibility = if (appointments.isEmpty()) View.VISIBLE else View.GONE
+                binding.progressBar.visibility = View.GONE
+            }
+        })
+
+        appointmentViewModel.appointmentStatus.observe(viewLifecycleOwner, Observer { status ->
+            if (_binding != null) { // Binding null kontrolü
+                if (status.contains("Error")) {
+                    Toast.makeText(context, status, Toast.LENGTH_SHORT).show()
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
         })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        FirestoreUtil.removeAllListeners()
     }
 }

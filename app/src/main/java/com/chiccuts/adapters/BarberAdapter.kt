@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chiccuts.R
+import com.chiccuts.activities.BookAppointmentActivity
 import com.chiccuts.databinding.ItemBarberBinding
 import com.chiccuts.models.Barber
 
@@ -29,18 +30,23 @@ class BarberAdapter(private val context: Context, private val onClick: (Barber) 
         fun bind(barber: Barber) {
             binding.tvBarberName.text = barber.salonName
             binding.tvBarberServices.text = barber.serviceTypes.joinToString(", ")
-            binding.tvBarberRating.text = "Rating: ${barber.rating}"
+            // Rating ve ratingsCount değerlerini doğru şekilde göster
+            binding.tvBarberRating.text = if (barber.ratingsCount != null && barber.ratingsCount!! > 0) {
+                String.format("%.1f (%d ratings)", barber.rating, barber.ratingsCount)
+            } else {
+                "0 (0 ratings)"
+            }
 
-            // Load profile picture using Glide
             if (!barber.profilePictureUrl.isNullOrEmpty()) {
                 Glide.with(binding.ivBarberProfile.context)
                     .load(barber.profilePictureUrl)
                     .placeholder(R.drawable.ic_launcher_foreground)
+                    .circleCrop()
                     .into(binding.ivBarberProfile)
             }
 
             binding.root.setOnClickListener {
-                onClick(barber) // Trigger click listener when item is clicked
+                onClick(barber)
             }
 
             binding.btnShowOnMap.setOnClickListener {
@@ -51,6 +57,14 @@ class BarberAdapter(private val context: Context, private val onClick: (Barber) 
                 context.startActivity(mapIntent)
             }
         }
+    }
+
+    private fun openBookAppointment(barber: Barber) {
+        val intent = Intent(context, BookAppointmentActivity::class.java).apply {
+            putExtra("BARBER_ID", barber.barberId)
+            putExtra("SALON_NAME", barber.salonName)
+        }
+        context.startActivity(intent)
     }
 }
 

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,94 +7,110 @@
     android:padding="16dp"
     tools:context=".fragments.ProfileFragment">
 
-    <!-- Profile Image -->
     <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="32dp"
-        android:src="@drawable/ic_default_avatar"
-        android:contentDescription="@string/profile_image"
         android:layout_marginBottom="16dp"
-        android:scaleType="centerCrop"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="4dp"
-        android:elevation="4dp"
         android:clickable="true"
+        android:contentDescription="@string/profile_image"
+        android:elevation="4dp"
         android:focusable="true"
-        app:layout_constraintTop_toTopOf="parent"
+        android:padding="4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_default_avatar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Username -->
+    <ImageView
+        android:id="@+id/ivEditProfileImage"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_edit"
+        android:layout_gravity="center"
+        android:contentDescription="@string/edit_profile_image"
+        app:layout_constraintStart_toStartOf="@+id/ivProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage" />
+
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username"
-        android:textSize="20sp"
-        android:textColor="?attr/colorPrimary"
-        android:fontFamily="sans-serif-medium"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/ivProfileImage"
+        android:fontFamily="sans-serif-medium"
+        android:text="Username"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/ivProfileImage" />
 
-    <!-- Name -->
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnSurface"
-        android:fontFamily="sans-serif"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvUsername"
+        android:fontFamily="sans-serif"
+        android:text="Name"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tvUsername" />
 
-    <!-- Email -->
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnSurface"
-        android:fontFamily="sans-serif"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvName"
+        android:fontFamily="sans-serif"
+        android:text="Email"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-    <!-- Edit Button -->
+    <TextView
+        android:id="@+id/tvServiceDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/services_description_placeholder"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEmail" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:text="Edit"
         android:textAllCaps="false"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/tvEmail"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvServiceDescription" />
 
-    <!-- Logout Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:text="Logout"
         android:textAllCaps="false"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btnEdit"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEdit" />
 </androidx.constraintlayout.widget.ConstraintLayout>

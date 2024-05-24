@@ -52,6 +52,11 @@
         <activity android:name=".activities.SelectLocationActivity"
             android:exported="true" />
 
+        <activity android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="true"/>
+
         <!-- Conditional attribute for API 33 and higher -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
