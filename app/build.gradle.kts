@@ -64,6 +64,7 @@ dependencies {
 
     // Lifecycle components
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 
     // Glide for image loading
     implementation("com.github.bumptech.glide:glide:4.12.0")

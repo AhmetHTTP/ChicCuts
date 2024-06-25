@@ -11,5 +11,5 @@ data class User(
     val profilePictureUrl: String? = null,
     val gender: String = "",
     val registrationDate: Date = Date(),
-    val isActive: Boolean = true
+    val isActive: Boolean = true,
 )

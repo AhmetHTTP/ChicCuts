@@ -15,5 +15,8 @@ data class Barber(
     val isActive: Boolean = true,
     val registrationDate: Date = Date(),
     val serviceDescription: String = "",
-    var ratingsCount: Int? = 0
+    var ratingsCount: Int? = 0,
+    val address: String = "", // Eklenen alan
+    val businessName: String = "", // Eklenen alan
+    val userId: String = "" // Eklenen alan
 )

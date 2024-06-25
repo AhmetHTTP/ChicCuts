@@ -262,6 +262,7 @@ class AppointmentAdapter(
             snapshotListener?.remove()
             snapshotListener = null
             auth.removeAuthStateListener(authStateListener)
+            FirestoreUtil.removeListenersForUser(auth.currentUser?.uid ?: "")
         }
     }
 
