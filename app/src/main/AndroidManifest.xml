@@ -60,6 +60,6 @@
         <!-- Conditional attribute for API 33 and higher -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDFi1hHklj5XblDwOD5h0gWRS9xf0mCU0M" />
+            android:value="Your-Api-Key" />
     </application>
 </manifest>
