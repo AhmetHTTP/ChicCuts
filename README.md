@@ -20,6 +20,36 @@ ChicCuts is a mobile application developed for the Android platform, designed to
 - **Google Maps API:** Used for map and location functionalities.
 - **Material Design:** Applied for user interface design.
 
+## Screenshots
+
+### Login Screen
+<img src="screenshots/login_screen.png" alt="Login Screen" width="300"/>
+
+### User Registration
+<img src="screenshots/register_user_screen.png" alt="User Registration" width="300"/>
+
+### Business Registration
+<img src="screenshots/register_businness_screen.png" alt="Business Registration" width="300"/>
+
+### Business Location Selection
+<img src="screenshots/register_businness_selectLocation_screen.png" alt="Business Location Selection" width="300"/>
+
+### Profile Screen
+<img src="screenshots/profile_screen.png" alt="Profile Screen" width="300"/>
+
+### Barber Screen
+<img src="screenshots/barber_screen.png" alt="Barber Screen" width="300"/>
+
+### Appointment Booking
+<img src="screenshots/book_appointment_screen.png" alt="Appointment Booking" width="300"/>
+
+### Appointment Screen
+<img src="screenshots/appointment_screen.png" alt="Appointment Screen" width="300"/>
+
+### Appointment Rating
+<img src="screenshots/appointment_rating_screen.png" alt="Appointment Rating" width="300"/>
+
+
 ## Installation
 
 1. Clone the repository to your local machine:
@@ -54,4 +84,4 @@ We welcome contributions! Please open an issue before making any changes and pro
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
